@@ -51,6 +51,15 @@ public class Course {
 	@OneToMany(mappedBy="nextCourse")
 	private List<PreCourse> nextCourses = new ArrayList<>();
 	
-	// **regist course List**
-	// **scrap List**
+	@OneToMany(mappedBy="course")
+	private List<Lecture> lectures = new ArrayList<>();
+	
+	@OneToMany(mappedBy="course")
+	private List<RegistCourse> registCourses = new ArrayList<>();
+	
+	@OneToMany(mappedBy="course")
+	private List<Scrap> scraps = new ArrayList<>();
+	
+	@OneToMany(mappedBy="course")
+	private List<Notice> notices = new ArrayList<>();
 }
