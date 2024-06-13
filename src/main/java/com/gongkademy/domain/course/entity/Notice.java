@@ -1,7 +1,6 @@
 package com.gongkademy.domain.course.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,30 +9,22 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import lombok.Getter;
 
 @Entity
 @Getter
-public class Lecture {
-
+public class Notice {
+	
 	@Id
 	@GeneratedValue
-	@Column(name = "lecture_id")
+	@Column(name = "notice_id")
 	private Long id;
 	
-	private Integer order;
+	private LocalDateTime createdTime;
 	
-	private Long time;
-	
-	private String link;
-	
-	private String title;
+	private String content;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="course_id")
 	private Course course;
-	
-	@OneToMany(mappedBy = "lecture")
-	private List<RegistLecture> registLectures = new ArrayList<>();
 }
