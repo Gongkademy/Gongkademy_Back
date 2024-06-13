@@ -18,11 +18,11 @@ public class PreCourse {
 	private Long id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="course_id")
+	@JoinColumn(name="pre_id")
 	private Course preCourse;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="course_id")
+	@JoinColumn(name="next_id")
 	private Course nextCourse;
 	
 }

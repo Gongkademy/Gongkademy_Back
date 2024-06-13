@@ -22,7 +22,7 @@ public class Lecture {
 	@Column(name = "lecture_id")
 	private Long id;
 	
-	private Integer order;
+	private int lectureOrder;
 	
 	private Long time;
 	

@@ -38,17 +38,17 @@ public class Course {
 	private String status;
 	
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="course_file_id")
+	@JoinColumn(name="course_img_id")
 	private CourseFile courseImg; // 강좌 대표 이미지
 	
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="course_file_id")
+	@JoinColumn(name="course_note_id")
 	private CourseFile courseNote; // 강좌 자료
 	
-	@OneToMany(mappedBy="PreCourse")
+	@OneToMany(mappedBy="preCourse")
 	private List<PreCourse> preCourses = new ArrayList<>();
 	
-	@OneToMany(mappedBy="PreCourse")
+	@OneToMany(mappedBy="nextCourse")
 	private List<PreCourse> nextCourses = new ArrayList<>();
 	
 	// **regist course List**
