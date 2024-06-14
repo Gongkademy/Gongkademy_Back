@@ -1,6 +1,6 @@
 package com.gongkademy.domain.community.controller;
 
-import com.gongkademy.domain.community.entity.QnaBoard;
+import com.gongkademy.domain.community.entity.board.QnaBoard;
 import com.gongkademy.domain.community.service.QnaBoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

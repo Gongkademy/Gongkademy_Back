@@ -1,6 +1,6 @@
 package com.gongkademy.repository;
 
-import com.gongkademy.domain.community.entity.QnaBoard;
+import com.gongkademy.domain.community.entity.board.QnaBoard;
 import com.gongkademy.domain.community.repository.QnaBoardRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;

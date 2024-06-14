@@ -1,6 +1,6 @@
 package com.gongkademy.domain.community.service;
 
-import com.gongkademy.domain.community.entity.QnaBoard;
+import com.gongkademy.domain.community.entity.board.QnaBoard;
 import com.gongkademy.domain.community.repository.QnaBoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
