@@ -38,4 +38,5 @@ public class CourseReview {
 	private Member member;
 	
 	private String nickname;
+	
 }

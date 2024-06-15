@@ -62,4 +62,5 @@ public class Course {
 	
 	@OneToMany(mappedBy="course")
 	private List<Notice> notices = new ArrayList<>();
+	
 }

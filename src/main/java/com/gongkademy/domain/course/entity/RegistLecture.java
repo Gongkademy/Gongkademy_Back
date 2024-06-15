@@ -33,5 +33,4 @@ public class RegistLecture {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="regist_course_id")
 	private RegistCourse registCourse;
-
 }

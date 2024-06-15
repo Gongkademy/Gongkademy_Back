@@ -29,4 +29,5 @@ public class CourseComment {
 	private String content;
 	
 	private int likeCount;
+	
 }

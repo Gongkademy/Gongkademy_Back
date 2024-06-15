@@ -28,4 +28,5 @@ public class Scrap {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="id")
 	private Member member;
+	
 }

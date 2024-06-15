@@ -24,5 +24,4 @@ public class PreCourse {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="next_id")
 	private Course nextCourse;
-	
 }

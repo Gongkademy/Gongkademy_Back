@@ -31,5 +31,4 @@ public class CourseFile {
 	
 	@Enumerated(EnumType.STRING)
 	private CourseFileCateg categ; // 강좌파일 카테고리 [COURSEIMG, COURSENOTE]
-	
 }
