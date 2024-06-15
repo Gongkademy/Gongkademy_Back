@@ -3,10 +3,9 @@ package com.gongkademy.domain.community.entity.comment;
 import com.gongkademy.domain.community.entity.board.Board;
 import com.gongkademy.domain.member.entity.Member;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +13,8 @@ import java.util.List;
 @Setter
 @Getter
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Comment {
 
     @Id
@@ -33,6 +34,8 @@ public class Comment {
     private String nickname;
 
     private Long likeCount;
+
+    private LocalDateTime createTime = LocalDateTime.now();
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

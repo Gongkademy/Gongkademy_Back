@@ -9,11 +9,10 @@ public interface CommentService {
 
     CommentResponseDTO createComment(CommentRequestDTO commentRequestDTO);
 
-    CommentResponseDTO updateComment(Long id, CommentRequestDTO commentRequestDTO);
+    // 댓글 수정 필요한 지
+//    CommentResponseDTO updateComment(Long id, CommentRequestDTO commentRequestDTO);
 
-    CommentResponseDTO getComment(Long id);
-
-    List<CommentResponseDTO> getAllComments();
+    List<CommentResponseDTO> getComments(Long articleId);
 
     void deleteComment(Long id);
 }

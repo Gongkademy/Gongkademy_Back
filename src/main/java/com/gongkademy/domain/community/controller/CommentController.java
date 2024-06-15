@@ -23,15 +23,9 @@ public class CommentController {
         return new ResponseEntity<>(commentResponseDTO, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateComment(@PathVariable Long id, @RequestBody CommentRequestDTO commentRequestDTO) {
-        CommentResponseDTO commentResponseDTO = commentService.updateComment(id, commentRequestDTO);
-        return ResponseEntity.ok(commentResponseDTO);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<CommentResponseDTO>> getAllComments() {
-        List<CommentResponseDTO> commentResponseDTOS = commentService.getAllComments();
+    @GetMapping("/{boardId}")
+    public ResponseEntity<List<CommentResponseDTO>> getComments(@PathVariable Long boardId) {
+        List<CommentResponseDTO> commentResponseDTOS = commentService.getComments(boardId);
         return ResponseEntity.ok(commentResponseDTOS);
     }
 
