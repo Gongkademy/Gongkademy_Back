@@ -24,6 +24,8 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final MemberRepositoryImpl memberRepositoryImpl;
 
+    // 최신 순 매직넘버 시작
+    private final int DEFAULT_TOP = 0;
 
     @Override
     public BoardResponseDTO createBoard(BoardRequestDTO boardRequestDTO) {
@@ -90,8 +92,8 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<BoardResponseDTO> getLatestBoards(int index) {
-        Pageable pageable = PageRequest.of(0, index);
+    public List<BoardResponseDTO> getLatestBoards(int LIMIT) {
+        Pageable pageable = PageRequest.of(DEFAULT_TOP, LIMIT);
         List<Board> boards = boardRepository.findAllByOrderByCreateTimeDesc(pageable).getContent();
 
         List<BoardResponseDTO> boardResponseDTOS = new ArrayList<>();
