@@ -35,6 +35,7 @@ public class Comment {
 
     private Long likeCount;
 
+    @Builder.Default
     private LocalDateTime createTime = LocalDateTime.now();
 
     @Enumerated(EnumType.STRING)
@@ -46,6 +47,7 @@ public class Comment {
     private Comment parent;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Comment> children = new ArrayList<>();
 
     // 연관 관계 메서드

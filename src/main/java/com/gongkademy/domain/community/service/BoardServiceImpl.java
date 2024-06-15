@@ -94,7 +94,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public List<BoardResponseDTO> getLatestBoards(int LIMIT) {
         Pageable pageable = PageRequest.of(DEFAULT_TOP, LIMIT);
-        List<Board> boards = boardRepository.findAllByOrderByCreateTimeDesc(pageable).getContent();
+        List<Board> boards = boardRepository.findByOrderByCreateTimeDesc(pageable).getContent();
 
         List<BoardResponseDTO> boardResponseDTOS = new ArrayList<>();
 

@@ -36,7 +36,12 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentResponseDTO> getComments(Long articleId) {
-        return List.of();
+        List<Comment> comments = commentRepository.findByBoardArticleIdAndParentIsNullOrderByCreateTimeAsc(articleId);
+        List<CommentResponseDTO> commentResponseDTOS = new ArrayList<>();
+        for (Comment comment : comments) {
+            commentResponseDTOS.add(convertToDTO(comment));
+        }
+        return commentResponseDTOS;
     }
 
     @Override
