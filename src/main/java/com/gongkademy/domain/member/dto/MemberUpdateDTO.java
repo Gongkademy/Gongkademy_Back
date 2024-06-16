@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MemberUpdateDTO {
-
+    private String email;
     private String newNickname;
     private String university;
     private String major;
