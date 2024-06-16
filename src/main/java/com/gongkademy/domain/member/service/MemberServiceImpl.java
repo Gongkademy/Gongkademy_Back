@@ -51,13 +51,14 @@ public class MemberServiceImpl implements MemberService{
     /**
      * 중복된 닉네임이 있는지 검증합니다.
      * @param nickname 닉네임
+     * 현재는 닉네임 중복 허용이므로 주석처리
      */
-    @Override
-    public void validateDuplicateNickname(String nickname) {
-        memberRepository.findByNickname(nickname).ifPresent(m -> {
-            throw new CustomException(ErrorCode.DUPLICATE_NICKNAME);
-        });
-    }
+//    @Override
+//    public void validateDuplicateNickname(String nickname) {
+//        memberRepository.findByNickname(nickname).ifPresent(m -> {
+//            throw new CustomException(ErrorCode.DUPLICATE_NICKNAME);
+//        });
+//    }
 
     /**
      * 중복된 이메일이 있는지 검증합니다.
@@ -76,52 +77,16 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public void updateNickname(MemberUpdateDTO dto) {
         Member member = memberRepository.findByEmail(dto.getEmail()).orElseThrow(IllegalArgumentException::new);
-        member.updateNickname(dto.getNewNickname());
+//        member.updateNickname(dto.getNewNickname());
     }
 
     /**
      * @param id 회원 ID
      */
-    @Override
-    public void deleteMember(Long id) {
-        memberRepository.deleteMember(id);
-    }
+//    @Override
+//    public void deleteMember(Long id) {
+//        memberRepository.deleteMember(id);
+//    }
 
-    /**
-     * 회원 엔티티를 회원 정보 DTO로 변환.
-     * @param member 회원 엔티티
-     * @return 회원 정보 DTO
-     */
-    public MemberInfoDTO entityToMemberInfoDTO(Member member) {
-        return MemberInfoDTO.builder()
-                .nickname(member.getNickname())
-                .email(member.getEmail())
-                .birthday(member.getBirthday() != null ? member.getBirthday().toString() : null)
-                .build();
-    }
 
-    /**
-     * 회원 가입 정보 DTO를 회원 엔티티로 변환.
-     * @param dto 회원 가입 정보 DTO
-     * @return 회원 엔티티
-     */
-    public Member memberSignUpDTOtoEntity(MemberSignUpDTO dto) {
-        return Member.builder()
-                .nickname(dto.getNickname())
-                .email(dto.getEmail())
-//                .password(dto.getPassword())
-                .birthday(LocalDate.parse(dto.getBirthday(), DateTimeFormatter.ofPattern("yyyyMMdd")))
-                .build();
-    }
-
-    /**
-     * 회원 업데이트 정보 DTO를 회원 엔티티로 변환.
-     * @param dto 회원 업데이트 정보 DTO
-     * @return 회원 엔티티
-     */
-    public Member memberUpdateDTOtoEntity(MemberUpdateDTO dto) {
-        return Member.builder()
-                .nickname(dto.getNewNickname())
-                .build();
-    }
 }
