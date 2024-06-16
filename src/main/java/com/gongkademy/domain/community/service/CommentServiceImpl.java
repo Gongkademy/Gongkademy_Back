@@ -31,15 +31,15 @@ public class CommentServiceImpl implements CommentService {
     public CommentResponseDTO createComment(CommentRequestDTO commentRequestDTO) {
         Comment comment = convertToEntity(commentRequestDTO);
         commentRepository.save(comment);
-        return convertToDTO(comment);
+        return convertToDTO(comment, comment.getMember().getId());
     }
 
     @Override
-    public List<CommentResponseDTO> getComments(Long articleId) {
+    public List<CommentResponseDTO> getComments(Long articleId, Long currentMemberId) {
         List<Comment> comments = commentRepository.findByBoardArticleIdAndParentIsNullOrderByCreateTimeAsc(articleId);
         List<CommentResponseDTO> commentResponseDTOS = new ArrayList<>();
         for (Comment comment : comments) {
-            commentResponseDTOS.add(convertToDTO(comment));
+            commentResponseDTOS.add(convertToDTO(comment, currentMemberId));
         }
         return commentResponseDTOS;
     }
@@ -75,10 +75,10 @@ public class CommentServiceImpl implements CommentService {
         return commentBuilder.build();
     }
 
-    private CommentResponseDTO convertToDTO(Comment comment) {
+    private CommentResponseDTO convertToDTO(Comment comment, Long currentMemberId) {
         List<CommentResponseDTO> childrenDTOs = new ArrayList<>();
         for (Comment child : comment.getChildren()) {
-            childrenDTOs.add(convertToDTO(child));
+            childrenDTOs.add(convertToDTO(child, currentMemberId));
         }
 
         return CommentResponseDTO.builder()
@@ -91,6 +91,7 @@ public class CommentServiceImpl implements CommentService {
                 .commentType(comment.getCommentType())
                 .parentId(comment.getParent() != null ? comment.getParent().getCommentId() : null)
                 .children(childrenDTOs)
+                .isAuthor(comment.getMember().getId().equals(currentMemberId))  // 작성자인지 아닌지 확인하는 메서드
                 .build();
     }
 }

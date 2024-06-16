@@ -25,7 +25,8 @@ public class CommentController {
 
     @GetMapping("/{boardId}")
     public ResponseEntity<List<CommentResponseDTO>> getComments(@PathVariable Long boardId) {
-        List<CommentResponseDTO> commentResponseDTOS = commentService.getComments(boardId);
+        Long currentMemberId = 0L;  // 사용자 아이디를 가져오는 방법은 프로젝트 방향성에 따라 다르다
+        List<CommentResponseDTO> commentResponseDTOS = commentService.getComments(boardId, currentMemberId);
         return ResponseEntity.ok(commentResponseDTOS);
     }
 
