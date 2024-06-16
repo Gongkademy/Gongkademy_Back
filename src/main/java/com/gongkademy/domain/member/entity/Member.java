@@ -44,8 +44,8 @@ public class Member {
     @Builder.Default
     private List<MemberRole> memberRoleList = new ArrayList<>();
 
-    public void updateNickname(String nickname){
-        this.nickname = nickname;
+    public void updateName(String name){
+        this.name = name;
     }
 
     public void addRole(MemberRole memberRole){
