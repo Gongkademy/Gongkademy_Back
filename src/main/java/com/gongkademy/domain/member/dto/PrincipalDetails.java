@@ -25,6 +25,11 @@ public class PrincipalDetails implements OAuth2User, UserDetails {
         return Arrays.asList(new SimpleGrantedAuthority("ROLE_" + member.getMemberRoleList().toString()));
     }
 
+    @Override
+    public String getPassword() {
+        return "";
+    }
+
     //Oauth2인증 시 제공된 맵 반환
     @Override
     public Map<String, Object> getAttributes() {
@@ -42,9 +47,9 @@ public class PrincipalDetails implements OAuth2User, UserDetails {
     }
 
     //password 반환
-    public String getPassword() {
-        return member.getPassword();
-    }
+    //공카데미서비스는 기본적으로 유저의 password가 따로 피룡하지 않음.
+    //imple하고있는 UserDetails에서 기본적으로 password를 포함하고있기떄ㅓ문에ㅐ
+    //강제적으로 method를 만들어줘야함
 
     @Override
     public String getUsername() {
