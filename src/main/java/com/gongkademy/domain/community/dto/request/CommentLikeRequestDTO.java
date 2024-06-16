@@ -13,6 +13,5 @@ public class CommentLikeRequestDTO {
 
     private Long memberId;
     private Long commentId;
-    private CommentType commentType;
 
 }

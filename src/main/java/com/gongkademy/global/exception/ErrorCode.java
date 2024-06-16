@@ -30,9 +30,8 @@ public enum ErrorCode {
     //Comment
     INVALID_COMMENT_ID(HttpStatus.BAD_REQUEST, "유효하지 않은 댓글 ID입니다."),
     INVALID_PARENT_COMMENT_ID(HttpStatus.BAD_REQUEST, "유효하지 않은 부모 댓글 ID입니다."),
-
-    //CommentLike
-    INVALID_COMMENTLIKE_ID(HttpStatus.BAD_REQUEST, "유효하지 않은 댓글 좋아요입니다."),
+    ALREADY_LIKED(HttpStatus.CONFLICT, "이미 좋아요를 눌렀습니다."),
+    NOT_YET_LIKED(HttpStatus.CONFLICT, "아직 좋아요를 누르지 않았습니다"),
 
     //Pick
     INVALID_PICK_ID(HttpStatus.BAD_REQUEST, "유효하지 않은 픽입니다.");
