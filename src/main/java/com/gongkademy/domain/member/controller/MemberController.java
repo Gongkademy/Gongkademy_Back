@@ -48,7 +48,7 @@ public class MemberController {
     }
     @PostMapping("")
     public HttpStatus save(@RequestBody MemberSignUpDTO dto) {
-        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+//        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         memberService.join(dto);
         return HttpStatus.OK;
     }

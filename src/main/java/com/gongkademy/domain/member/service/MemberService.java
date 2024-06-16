@@ -27,7 +27,7 @@ public interface MemberService {
         return Member.builder()
                 .nickname(dto.getNickname())
                 .email(dto.getEmail())
-                .password(dto.getPassword())
+//                .password(dto.getPassword())
                 .birthday(LocalDate.parse(dto.getBirthday(), DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .build();
     }
