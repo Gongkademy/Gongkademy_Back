@@ -26,20 +26,13 @@ public class Member {
     private Long id;
 
     @NotEmpty
+    private String name;
+    @NotEmpty
     private String email;
     @NotEmpty
     private String nickname;
     @NotEmpty
-    private String password;
-
     private LocalDate birthday;
-
-    public void updateNickname(String nickname){
-            this.nickname = nickname;
-    }
-    public void updatePassword(String password){
-        this.password = password;
-    }
 
     private String university;
     private String major;
@@ -48,6 +41,10 @@ public class Member {
     @ElementCollection(fetch = FetchType.LAZY)
     @Builder.Default
     private List<MemberRole> memberRoleList = new ArrayList<>();
+
+    public void updateNickname(String nickname){
+        this.nickname = nickname;
+    }
 
     public void addRole(MemberRole memberRole){
         memberRoleList.add(memberRole);

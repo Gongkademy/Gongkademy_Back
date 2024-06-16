@@ -51,7 +51,7 @@ public class OAuth2MemberService extends DefaultOAuth2UserService implements Mem
         if (existingMember.isEmpty()) {
             member = Member.builder()
                     .email(email)
-                    .password("") // OAuth2 로그인 사용자는 비밀번호가 필요없음
+//                    .password("") // OAuth2 로그인 사용자는 비밀번호가 필요없음
                     .nickname("") // 닉네임은 추후 업데이트 필요
                     .birthday(null) // 생일 정보도 추후 업데이트 필요
                     .university("")
@@ -153,7 +153,7 @@ public class OAuth2MemberService extends DefaultOAuth2UserService implements Mem
         return Member.builder()
                 .nickname(dto.getNickname())
                 .email(dto.getEmail())
-                .password(dto.getPassword())
+//                .password(dto.getPassword())
                 .birthday(LocalDate.parse(dto.getBirthday(), DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .build();
     }
