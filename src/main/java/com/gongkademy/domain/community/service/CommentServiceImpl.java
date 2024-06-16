@@ -9,6 +9,9 @@ import com.gongkademy.domain.community.repository.BoardRepository;
 import com.gongkademy.domain.community.repository.CommentRepository;
 import com.gongkademy.domain.member.entity.Member;
 import com.gongkademy.domain.member.repository.MemberRepositoryImpl;
+import com.gongkademy.domain.member.service.UserDetailsServiceImpl;
+import com.gongkademy.global.exception.CustomException;
+import com.gongkademy.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,9 +55,9 @@ public class CommentServiceImpl implements CommentService {
 
     private Comment convertToEntity(CommentRequestDTO commentRequestDTO) {
         Board board = boardRepository.findById(commentRequestDTO.getArticleId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시글 없음"));
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_BOARD_ID));
         Member member = memberRepositoryImpl.findById(commentRequestDTO.getMemberId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 유저 없음"));
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_MEMBER_ID));
 
         // All 생성자와 빌더 필요
         Comment.CommentBuilder commentBuilder = Comment.builder()
@@ -68,7 +71,7 @@ public class CommentServiceImpl implements CommentService {
         // 대댓글 로직
         if (commentRequestDTO.getParentId() != null) {
             Comment parent = commentRepository.findById(commentRequestDTO.getParentId())
-                    .orElseThrow(() -> new IllegalArgumentException("해당 댓글 없음"));
+                    .orElseThrow(() -> new CustomException(ErrorCode.INVALID_COMMENT_ID));
             commentBuilder.parent(parent);
         }
 

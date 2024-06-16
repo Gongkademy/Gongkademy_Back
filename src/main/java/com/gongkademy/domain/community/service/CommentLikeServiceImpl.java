@@ -8,6 +8,8 @@ import com.gongkademy.domain.community.repository.CommentLikeRepository;
 import com.gongkademy.domain.community.repository.CommentRepository;
 import com.gongkademy.domain.member.entity.Member;
 import com.gongkademy.domain.member.repository.MemberRepositoryImpl;
+import com.gongkademy.global.exception.CustomException;
+import com.gongkademy.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +43,7 @@ public class CommentLikeServiceImpl implements CommentLikeService {
             commentLikeRepository.save(commentLike);
             return convertToDTO(commentLike);
         }
-        throw new IllegalStateException("코멘트라이크 못 찾음");
+        throw new CustomException(ErrorCode.INVALID_COMMENTLIKE_ID);
     }
 
     @Override
@@ -51,7 +53,7 @@ public class CommentLikeServiceImpl implements CommentLikeService {
         if (commentLikeOptional.isPresent()) {
             return convertToDTO(commentLikeOptional.get());
         }
-        throw new IllegalStateException("코멘트라이크 못 찾음");
+        throw new CustomException(ErrorCode.INVALID_COMMENTLIKE_ID);
     }
 
     @Override
@@ -71,7 +73,7 @@ public class CommentLikeServiceImpl implements CommentLikeService {
             decrementLikeCount(commentLikeOptional.get().getComment().getCommentId());
             commentLikeRepository.deleteById(id);
         } else {
-            throw new IllegalStateException("좋아요 없음");
+            throw new CustomException(ErrorCode.INVALID_COMMENTLIKE_ID);
         }
     }
 
@@ -83,7 +85,7 @@ public class CommentLikeServiceImpl implements CommentLikeService {
             comment.setLikeCount(comment.getLikeCount() + 1);
             commentRepository.save(comment);
         } else {
-            throw new IllegalStateException("댓글 못 찾음");
+            throw new CustomException(ErrorCode.INVALID_COMMENT_ID);
         }
     }
 
@@ -95,7 +97,7 @@ public class CommentLikeServiceImpl implements CommentLikeService {
             comment.setLikeCount(comment.getLikeCount() - 1);
             commentRepository.save(comment);
         } else {
-            throw new IllegalStateException("댓글 못 찾음");
+            throw new CustomException(ErrorCode.INVALID_COMMENT_ID);
         }
     }
 
@@ -106,14 +108,14 @@ public class CommentLikeServiceImpl implements CommentLikeService {
         if (commentOptional.isPresent()) {
             commentLike.setComment(commentOptional.get());
         } else {
-            throw new IllegalStateException("댓글 못 찾음");
+            throw new CustomException(ErrorCode.INVALID_COMMENT_ID);
         }
 
         Optional<Member> memberOptional = memberRepositoryImpl.findById(commentLikeRequestDTO.getMemberId());
         if (memberOptional.isPresent()) {
             commentLike.setMember(memberOptional.get());
         } else {
-            throw new IllegalStateException("멤버 못 찾음");
+            throw new CustomException(ErrorCode.INVALID_MEMBER_ID);
         }
 
         commentLike.setCommentType(commentLikeRequestDTO.getCommentType());
