@@ -56,22 +56,27 @@ public class PrincipalDetails implements OAuth2User, UserDetails {
         //email로관리
         return member.getEmail();
     }
+    //pringsecurity.userdetails.UserDetails 를 imple하면 작성해줘야만 하는 메소드
 
+    //계정이 만료되지 않았는지를 리턴, true를 리턴하면 만료되지 않았음을 표시
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    //계정이 잠겨있지 않은지를 리턴, true를 리턴하면 잠겨있지 않았음을 표시
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    //계정의 패스워드가 만료되지 않았는지를 리턴, true를 리턴하면 만료되지 않았음을 표시
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    //계정이 사용 가능한 계정인지를 리턴, true를 리턴하면 사용가능한 계정임을 의미
     @Override
     public boolean isEnabled() {
         return true;
