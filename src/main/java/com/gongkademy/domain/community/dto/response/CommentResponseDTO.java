@@ -1,6 +1,5 @@
 package com.gongkademy.domain.community.dto.response;
 
-import com.gongkademy.domain.community.entity.comment.CommentType;
 import lombok.*;
 
 import java.util.List;

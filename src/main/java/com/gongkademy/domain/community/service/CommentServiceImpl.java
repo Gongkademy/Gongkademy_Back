@@ -4,12 +4,10 @@ import com.gongkademy.domain.community.dto.request.CommentRequestDTO;
 import com.gongkademy.domain.community.dto.response.CommentResponseDTO;
 import com.gongkademy.domain.community.entity.board.Board;
 import com.gongkademy.domain.community.entity.comment.Comment;
-import com.gongkademy.domain.community.entity.comment.CommentType;
 import com.gongkademy.domain.community.repository.BoardRepository;
 import com.gongkademy.domain.community.repository.CommentRepository;
 import com.gongkademy.domain.member.entity.Member;
 import com.gongkademy.domain.member.repository.MemberRepositoryImpl;
-import com.gongkademy.domain.member.service.UserDetailsServiceImpl;
 import com.gongkademy.global.exception.CustomException;
 import com.gongkademy.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

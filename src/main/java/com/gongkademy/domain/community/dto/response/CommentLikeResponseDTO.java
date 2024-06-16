@@ -1,6 +1,5 @@
 package com.gongkademy.domain.community.dto.response;
 
-import com.gongkademy.domain.community.entity.comment.CommentType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
