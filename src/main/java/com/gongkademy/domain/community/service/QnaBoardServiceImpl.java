@@ -3,7 +3,7 @@ package com.gongkademy.domain.community.service;
 import com.gongkademy.domain.community.dto.request.QnaBoardRequestDto;
 import com.gongkademy.domain.community.dto.response.ImageResponseDto;
 import com.gongkademy.domain.community.dto.response.QnaBoardResponseDto;
-import com.gongkademy.domain.community.entity.board.ImageBoard;
+import com.gongkademy.domain.community.entity.board.Image;
 import com.gongkademy.domain.community.entity.board.QnaBoard;
 import com.gongkademy.domain.community.repository.QnaBoardRepository;
 import com.gongkademy.domain.member.entity.Member;
@@ -113,9 +113,9 @@ public class QnaBoardServiceImpl implements QnaBoardService {
     private QnaBoardResponseDto convertToDto(QnaBoard qnaBoard) {
 
         List<ImageResponseDto> imageResponseDtos = new ArrayList<>();
-        List<ImageBoard> imageBoards = qnaBoardRepository.findImageBoards(qnaBoard.getBoardType(), qnaBoard.getArticleId());
+        List<Image> images = qnaBoardRepository.findImages(qnaBoard.getBoardType(), qnaBoard.getArticleId());
 
-        for (ImageBoard imageBoard : imageBoards) {
+        for (Image imageBoard : images) {
             imageResponseDtos.add(ImageResponseDto.builder().
                     originalImage(imageBoard.getOriginalImage())
                     .saveImage(imageBoard.getSaveImage())
