@@ -19,17 +19,11 @@ public class BoardController {
 
     private final int LIMIT = 3;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getBoard(@PathVariable Long id) {
-        BoardResponseDTO boardResponseDTO = boardService.getBoard(id);
-        boardService.incrementHit(id);
+    @GetMapping("/{articleId}")
+    public ResponseEntity<?> getBoard(@PathVariable Long articleId) {
+        BoardResponseDTO boardResponseDTO = boardService.getBoard(articleId);
+        boardService.incrementHit(articleId);
         return ResponseEntity.ok(boardResponseDTO);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<BoardResponseDTO>> getAllBoards() {
-        List<BoardResponseDTO> boardResponseDTOS = boardService.getAllBoards();
-        return ResponseEntity.ok(boardResponseDTOS);
     }
 
     // 최신 순 3개 가져오기
@@ -39,12 +33,27 @@ public class BoardController {
         return ResponseEntity.ok(boardResponseDTOS);
     }
 
+    @PostMapping("/{articleId}/like")
+    
+    @PostMapping("/{articleId}/scrap")
+
+    @GetMapping("/{articleId}/liked")
+
+    @GetMapping("/{articleId}/scrapped")
+
+
     /*
     관리자 전용
     @PostMapping
     public ResponseEntity<?> createBoard(@RequestBody BoardRequestDTO boardRequestDTO) {
         BoardResponseDTO boardResponseDTO = boardService.createBoard(boardRequestDTO);
         return new ResponseEntity<>(boardResponseDTO, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<BoardResponseDTO>> getAllBoards() {
+        List<BoardResponseDTO> boardResponseDTOS = boardService.getAllBoards();
+        return ResponseEntity.ok(boardResponseDTOS);
     }
 
     @PutMapping("/{id}")
