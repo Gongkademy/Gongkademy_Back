@@ -1,5 +1,6 @@
 package com.gongkademy.domain.community.service;
 
+import com.gongkademy.domain.community.dto.request.ImageRequestDto;
 import com.gongkademy.domain.community.dto.request.QnaBoardRequestDto;
 import com.gongkademy.domain.community.dto.response.ImageResponseDto;
 import com.gongkademy.domain.community.dto.response.QnaBoardResponseDto;
@@ -65,13 +66,10 @@ public class QnaBoardServiceImpl implements QnaBoardService {
         if (optQnaBoard.isEmpty()) {
             return null;
         }
-
         QnaBoard qnaBoard = optQnaBoard.get();
-
-        //TODO: 이미지 관련 메서드 정의
-
         // 항목 수정하기
         qnaBoard.update(qnaBoardRequestDto);
+
         return qnaBoard.getArticleId();
     }
 
@@ -82,31 +80,32 @@ public class QnaBoardServiceImpl implements QnaBoardService {
 
 
     private QnaBoard convertToEntity(QnaBoardRequestDto qnaBoardRequestDto) {
-        QnaBoard qnaBoard = new QnaBoard();
-        qnaBoard.setBoardType(qnaBoardRequestDto.getBoardType());
+        Member member = memberRepository.findById(qnaBoardRequestDto.getMemberId())
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_MEMBER_ID));
 
-        Optional<Member> memberOptional = memberRepository.findById(qnaBoardRequestDto.getMemberId());
-        if (memberOptional.isPresent()) {
-            qnaBoard.setMember(memberOptional.get());
-        } else {
-            throw new CustomException(ErrorCode.INVALID_MEMBER_ID);
+        List<Image> images = new ArrayList<>();
+        List<ImageRequestDto> imageRequestDtos = qnaBoardRequestDto.getImages();
+
+        if (!imageRequestDtos.isEmpty()) {
+            for (ImageRequestDto imageRequestDto : imageRequestDtos) {
+                images.add(Image.builder()
+                        .boardType(qnaBoardRequestDto.getBoardType())
+                        .originalImage(imageRequestDto.getOriginalImage())
+                        .saveImage(imageRequestDto.getSaveImage())
+                        .savedFolder(imageRequestDto.getSavedFolder()).build());
+            }
         }
-        //TODO: image는 따로 저장해야할 듯
-//        List<ImageRequestDto> imageRequestDtoList = qnaBoardRequestDto.getImages();
-//
-//        if (!imageRequestDtoList.isEmpty()) {
-//            for (ImageRequestDto imageRequestDto : imageRequestDtoList) {
-//                qnaBoard.setSaveImage(imageRequestDto.getSaveImage());
-//                qnaBoard.setOriginalImage(imageRequestDto.getOriginalImage());
-//                qnaBoard.setSavedFolder(imageRequestDto.getSavedFolder());
-//            }
-//        }
 
-        qnaBoard.setTitle(qnaBoardRequestDto.getTitle());
-        qnaBoard.setContent(qnaBoardRequestDto.getContent());
-        qnaBoard.setHit(0L);
-        qnaBoard.setLikeCount(0L);
-        return qnaBoard;
+        return QnaBoard.builder().
+                boardType(qnaBoardRequestDto.getBoardType())
+                .member(member)
+                .title(qnaBoardRequestDto.getTitle())
+                .content(qnaBoardRequestDto.getTitle())
+                .images(!(images.isEmpty()) ? images : new ArrayList<>())
+                .hit(0L)
+                .likeCount(0L)
+                .scrapCount(0L)
+                .commentCount(0L).build();
     }
 
 
@@ -115,11 +114,15 @@ public class QnaBoardServiceImpl implements QnaBoardService {
         List<ImageResponseDto> imageResponseDtos = new ArrayList<>();
         List<Image> images = qnaBoardRepository.findImages(qnaBoard.getBoardType(), qnaBoard.getArticleId());
 
-        for (Image imageBoard : images) {
-            imageResponseDtos.add(ImageResponseDto.builder().
-                    originalImage(imageBoard.getOriginalImage())
-                    .saveImage(imageBoard.getSaveImage())
-                    .savedFolder(imageBoard.getSavedFolder()).build());
+        if (!images.isEmpty()) {
+            for (Image image : images) {
+                imageResponseDtos.add(ImageResponseDto.builder().
+                        articleId(qnaBoard.getArticleId())
+                        .boardType(qnaBoard.getBoardType())
+                        .originalImage(image.getOriginalImage())
+                        .saveImage(image.getSaveImage())
+                        .savedFolder(image.getSavedFolder()).build());
+            }
         }
 
         return QnaBoardResponseDto.builder().

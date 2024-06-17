@@ -15,7 +15,7 @@ public class Image {
     private Long imageId;
 
     @ManyToOne
-    @JoinColumn(name = "articleId", nullable = false)
+    @JoinColumn(name = "article_id", nullable = false)
     private Board board;
 
     @Enumerated(EnumType.STRING)

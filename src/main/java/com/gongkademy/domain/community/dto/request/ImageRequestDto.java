@@ -12,7 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ImageRequestDto {
-    private String articleId;
     private BoardType boardType;
     private String savedFolder;
     private String originalImage;
