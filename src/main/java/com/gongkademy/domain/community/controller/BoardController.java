@@ -1,5 +1,6 @@
 package com.gongkademy.domain.community.controller;
 
+import com.amazonaws.Response;
 import com.gongkademy.domain.community.dto.request.BoardRequestDTO;
 import com.gongkademy.domain.community.dto.response.BoardResponseDTO;
 import com.gongkademy.domain.community.service.BoardService;
@@ -50,10 +51,21 @@ public class BoardController {
         return ResponseEntity.ok().build();
     }
 
+    // Authentication 필요
     @GetMapping("/{articleId}/liked")
+    public ResponseEntity<List<BoardResponseDTO>> getLikeBoards() {
+        Long currentMemberId = 1L;
+        List<BoardResponseDTO> likeBoards = boardService.getLikeBoards(currentMemberId);
+        return ResponseEntity.ok(likeBoards);
+    }
 
+    // Authentication 필요
     @GetMapping("/{articleId}/scrapped")
-
+    public ResponseEntity<List<BoardResponseDTO>> getScrapBoards() {
+        Long currentMemberId = 1L;
+        List<BoardResponseDTO> scrapBoards = boardService.getScrapBoards(currentMemberId);
+        return ResponseEntity.ok(scrapBoards);
+    }
     /*
     관리자 전용
     @PostMapping

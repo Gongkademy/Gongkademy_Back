@@ -117,14 +117,37 @@ public class BoardServiceImpl implements BoardService {
         boardRepository.save(board);
     }
 
+    // 좋아요한 게시글
     @Override
     public List<BoardResponseDTO> getLikeBoards(Long memberId) {
-        return List.of();
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_MEMBER_ID));
+
+        List<Pick> likes = pickRepository.findAllByMemberAndPickType(member, PickType.LIKE);
+        List<BoardResponseDTO> likeBoardDTOs = new ArrayList<>();
+
+        for (Pick like : likes) {
+            likeBoardDTOs.add(convertToDTO(like.getBoard()));
+        }
+
+        return likeBoardDTOs;
     }
 
+    // 스크랩한 게시글
     @Override
     public List<BoardResponseDTO> getScrapBoards(Long memberId) {
-        return List.of();
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_MEMBER_ID));
+
+        List<Pick> likes = pickRepository.findAllByMemberAndPickType(member, PickType.SCRAP);
+        List<BoardResponseDTO> scrapBoardDTOs = new ArrayList<>();
+
+        for (Pick like : likes) {
+            scrapBoardDTOs.add(convertToDTO(like.getBoard()));
+        }
+
+        return scrapBoardDTOs;
+
     }
 
     private Board convertToEntity(BoardRequestDTO boardRequestDTO) {
