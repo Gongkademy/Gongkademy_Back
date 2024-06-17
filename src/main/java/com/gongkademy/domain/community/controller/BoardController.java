@@ -33,14 +33,26 @@ public class BoardController {
         return ResponseEntity.ok(boardResponseDTOS);
     }
 
+    // Authentication 필요
     @PostMapping("/{articleId}/like")
-    
+    public ResponseEntity<?> toggleLikeCount(@PathVariable Long articleId) {
+        Long currentMemberId = 1L;
+        boardService.toggleLikeBoard(articleId, currentMemberId);
+        return ResponseEntity.ok().build();
+    }
+
+
+    // Authentication 필요
     @PostMapping("/{articleId}/scrap")
+    public ResponseEntity<?> toggleScrapCount(@PathVariable Long articleId) {
+        Long currentMemberId = 1L;
+        boardService.toggleScrapBoard(articleId, currentMemberId);
+        return ResponseEntity.ok().build();
+    }
 
     @GetMapping("/{articleId}/liked")
 
     @GetMapping("/{articleId}/scrapped")
-
 
     /*
     관리자 전용

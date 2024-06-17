@@ -4,6 +4,8 @@ import com.gongkademy.domain.community.dto.request.BoardRequestDTO;
 import com.gongkademy.domain.community.dto.response.BoardResponseDTO;
 import com.gongkademy.domain.community.dto.response.CommentResponseDTO;
 import com.gongkademy.domain.community.entity.board.Board;
+import com.gongkademy.domain.community.entity.pick.Pick;
+import com.gongkademy.domain.community.entity.pick.PickType;
 import com.gongkademy.domain.community.repository.BoardRepository;
 import com.gongkademy.domain.community.repository.PickRepository;
 import com.gongkademy.domain.member.entity.Member;
@@ -17,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -74,12 +77,44 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public void toggleLikeBoard(Long articleId, Long memberId) {
+        Board board = boardRepository.findById(articleId)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_BOARD_ID));
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_MEMBER_ID));
 
+        Optional<Pick> pickOptional = pickRepository.findByBoardAndMemberAndPickType(board, member, PickType.LIKE);
+
+        if (pickOptional.isPresent()) {
+            pickRepository.delete(pickOptional.get());
+            board.setLikeCount(board.getLikeCount() - 1);
+        } else {
+            Pick pick = new Pick(board, member, PickType.LIKE);
+            pickRepository.save(pick);
+            board.setLikeCount(board.getLikeCount() + 1);
+        }
+
+        boardRepository.save(board);
     }
 
     @Override
     public void toggleScrapBoard(Long articleId, Long memberId) {
+        Board board = boardRepository.findById(articleId)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_BOARD_ID));
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_MEMBER_ID));
 
+        Optional<Pick> pickOptional = pickRepository.findByBoardAndMemberAndPickType(board, member, PickType.SCRAP);
+
+        if (pickOptional.isPresent()) {
+            pickRepository.delete(pickOptional.get());
+            board.setScrapCount(board.getScrapCount() - 1);
+        } else {
+            Pick pick = new Pick(board, member, PickType.SCRAP);
+            pickRepository.save(pick);
+            board.setScrapCount(board.getScrapCount() + 1);
+        }
+
+        boardRepository.save(board);
     }
 
     @Override
@@ -93,22 +128,19 @@ public class BoardServiceImpl implements BoardService {
     }
 
     private Board convertToEntity(BoardRequestDTO boardRequestDTO) {
-        Board board = new Board();
-        board.setBoardType(boardRequestDTO.getBoardType());
+        Member member = memberRepository.findById(boardRequestDTO.getMemberId())
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_MEMBER_ID));
 
-        Optional<Member> memberOptional = memberRepository.findById(boardRequestDTO.getMemberId());
-        if (memberOptional.isPresent()) {
-            board.setMember(memberOptional.get());
-        } else {
-            throw new CustomException(ErrorCode.INVALID_MEMBER_ID);
-        }
-
-        board.setTitle(boardRequestDTO.getTitle());
-        board.setContent(boardRequestDTO.getContent());
-        board.setHit(0L);
-        board.setLikeCount(0L);
-        board.setCommentCount(0L);
-        return board;
+        return Board.builder()
+                .boardType(boardRequestDTO.getBoardType())
+                .member(member)
+                .title(boardRequestDTO.getTitle())
+                .content(boardRequestDTO.getContent())
+                .hit(0L)
+                .likeCount(0L)
+                .scrapCount(0L)
+                .commentCount(0L)
+                .build();
     }
 
     private BoardResponseDTO convertToDTO(Board board) {
@@ -121,6 +153,7 @@ public class BoardServiceImpl implements BoardService {
                 .content(board.getContent())
                 .createTime(board.getCreateTime())
                 .likeCount(board.getLikeCount())
+                .scrapCount(board.getScrapCount())
                 .hit(board.getHit())
                 .commentCount(board.getCommentCount())
                 .build();
