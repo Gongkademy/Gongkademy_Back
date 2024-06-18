@@ -14,6 +14,7 @@ import com.gongkademy.domain.course.entity.Course;
 import com.gongkademy.domain.course.entity.Lecture;
 import com.gongkademy.domain.course.entity.Notice;
 import com.gongkademy.domain.course.entity.RegistCourse;
+import com.gongkademy.domain.course.entity.RegistLecture;
 import com.gongkademy.domain.course.entity.Scrap;
 import com.gongkademy.domain.course.repository.CourseRepository;
 import com.gongkademy.domain.course.repository.LectureRepository;
@@ -60,7 +61,7 @@ public class CourseServiceImpl implements CourseService {
 		Long courseId = courseRequestDTO.getCourseId();
 		
 		List<Lecture> lectures = lectureRepository.findByCourseId(courseId);
-		List<CourseContentsResponseDTO> courseContentsDTOs = new ArrayList();
+		List<CourseContentsResponseDTO> courseContentsDTOs = new ArrayList<>();
 		
 		// TODO lecture complete인지 확인
 		for(Lecture lecture : lectures) {
@@ -93,6 +94,8 @@ public class CourseServiceImpl implements CourseService {
 		// 수강생 수 update
 		Optional<Course> course = courseRepository.findById(courseRequestDTO.getCourseId());
 		course.get().updateLectureCount();
+		
+		addRegistLectures(registCourse);
 		
 		CourseResponseDTO courseResponseDTO = this.convertToDTO(course.get());
 		return courseResponseDTO;
@@ -131,6 +134,21 @@ public class CourseServiceImpl implements CourseService {
 		List<Notice> notices = noticeRepository.findByCourseId(courseId);
 		return notices;
 	}
+	
+	// 수강 강좌에 대한 수강 강의 생성
+	private void addRegistLectures(RegistCourse registCourse) {
+        List<Lecture> lectures = lectureRepository.findByCourseId(registCourse.getCourse().getId());
+        
+        for (Lecture lecture : lectures) {
+            RegistLecture registLecture = new RegistLecture();
+            registLecture.setLecture(lecture);
+            registLecture.setRegistCourse(registCourse);
+            registLecture.setMember(registCourse.getMember());
+            
+            registCourse.addRegistLecture(registLecture);
+        }
+        registLectureRepository.saveAll(registCourse.getRegistLectures());
+    }
 
 	private CourseResponseDTO convertToDTO(Course course) {
 		CourseResponseDTO courseResponseDTO = new CourseResponseDTO();
