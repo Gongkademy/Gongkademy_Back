@@ -1,6 +1,7 @@
 package com.gongkademy.global.security.util;
 
 import javax.crypto.SecretKey;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import com.gongkademy.global.exception.ErrorCode;
@@ -119,28 +120,41 @@ public class JWTUtil {
     }
 
     /**
-    * token 검증
+     * 토큰 만료 검증
+     */
+    public boolean isExpired(String token) {
+        SecretKey key = null;
+        try {
+            key = Keys.hmacShaKeyFor(JWT_KEY.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        Date now = new Date();
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody().getExpiration().before(now);
+    }
+
+    /**
+    * 토큰 유효성 검증
     */
     public boolean isTokenValid(String token) {
+        SecretKey key = null;
         try {
-            SecretKey key = Keys.hmacShaKeyFor(JWT_KEY.getBytes("UTF-8"));
+            key = Keys.hmacShaKeyFor(JWT_KEY.getBytes("UTF-8"));
             Map<String, Object> claim = Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-            return true;
-        } catch (MalformedJwtException malformedJwtException) {
-            throw new CustomException(ErrorCode.JWT_MALFORMED);
-        } catch (ExpiredJwtException expiredJwtException) {
-            throw new CustomException(ErrorCode.JWT_EXPIRED);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         } catch (InvalidClaimException invalidClaimException) {
-            throw new CustomException(ErrorCode.JWT_INVALID);
-        } catch (JwtException jwtException) {
-            throw new CustomException(ErrorCode.JWT_ERROR);
-        } catch (Exception e) {
-            throw new CustomException(ErrorCode.COMMON_ERROR);
+            return false;
         }
+        return true;
     }
 
     // jwt토큰을 검증하는 역할
