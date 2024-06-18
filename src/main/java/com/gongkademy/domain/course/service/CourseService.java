@@ -3,6 +3,7 @@ package com.gongkademy.domain.course.service;
 import java.util.List;
 
 import com.gongkademy.domain.course.dto.request.CourseRequestDTO;
+import com.gongkademy.domain.course.dto.response.CourseContentsResponseDTO;
 import com.gongkademy.domain.course.dto.response.CourseResponseDTO;
 import com.gongkademy.domain.course.entity.Course;
 import com.gongkademy.domain.course.entity.Lecture;
@@ -10,9 +11,9 @@ import com.gongkademy.domain.course.entity.Notice;
 
 public interface CourseService {
 
-	List<CourseResponseDTO> getAllCourses();
+	List<CourseResponseDTO> getAllCourses(Long memberId);
 	
-	List<Lecture> getCourseContents();
+	List<CourseContentsResponseDTO> getCourseContents(CourseRequestDTO courseRequestDTO);
 	
 	CourseResponseDTO registCourse(CourseRequestDTO courseRequestDTO);
 	
@@ -27,8 +28,7 @@ public interface CourseService {
 	
 	/*
 	 * TODO
-	 * - 최근 강의 조회
-	 * - 강좌 소개 조회,
+	 * - 강좌 소개 조회
 	 * */
 	
 	

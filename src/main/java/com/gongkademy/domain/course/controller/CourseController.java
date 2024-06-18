@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gongkademy.domain.course.dto.request.CourseRequestDTO;
+import com.gongkademy.domain.course.dto.response.CourseContentsResponseDTO;
 import com.gongkademy.domain.course.dto.response.CourseResponseDTO;
 import com.gongkademy.domain.course.entity.Notice;
 import com.gongkademy.domain.course.service.CourseService;
@@ -29,15 +30,16 @@ public class CourseController {
 	// 1. 전체 강좌 관련
 	// - 전체 강좌 목록 조회
 	@GetMapping("")
-	public ResponseEntity<?> getAllCourses(){
-		List<CourseResponseDTO> courseResponseDTOs = courseService.getAllCourses();
+	public ResponseEntity<?> getAllCourses(@RequestBody Long memberId){
+		List<CourseResponseDTO> courseResponseDTOs = courseService.getAllCourses(memberId);
 		return new ResponseEntity<>(courseResponseDTOs, HttpStatus.OK);
 	}
 	
 	// - 목차 조회
-	@GetMapping("list/{course_id}")
-	public ResponseEntity<?> getCourseContents(){
-		
+	@GetMapping("list")
+	public ResponseEntity<?> getCourseContents(@RequestBody CourseRequestDTO courseRequestDTO){
+		List<CourseContentsResponseDTO> courseContentsDTOs = courseService.getCourseContents(courseRequestDTO);
+		return new ResponseEntity<>(courseContentsDTOs, HttpStatus.OK);
 	}
 	
 	// 2. 강좌 상세 관련
@@ -69,14 +71,14 @@ public class CourseController {
 		return new ResponseEntity<>(courseResponseDTO, HttpStatus.OK);
 	}
 	
-//	// - 최근 강의 조회
+	// - 최근 강의 조회
 //	@GetMapping("/recent-lecture/{course_id}")
 //	public ResponseEntity<?> getRecentLecture(){
-//		필요한가?
+//		player controller로 변경
 //	}
-//	
+	
 	// - 강좌 소개 조회
-	/*
+	/* TODO
 	 * 선수과목
 	 * 강의 소개
 	 * 강의 링크
@@ -84,8 +86,7 @@ public class CourseController {
 	 * */
 	@GetMapping("/info/{course_id}")
 	public ResponseEntity<?> getCourseInfo(){
-		
-		
+		return null;
 	}
 	
 	// - 공지사항 조회

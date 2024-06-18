@@ -26,4 +26,7 @@ public interface RegistLectureRepository extends JpaRepository<RegistLecture, Lo
 		
 	// 강의 id로 수강 강의 조회
 	Optional<RegistLecture> findByLectureId(Long id);
+
+	Boolean existsByMemberIdAndLectureIdAndComplete(Long memberId, Long LectureId, boolean complete);
+
 }

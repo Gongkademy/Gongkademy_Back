@@ -43,4 +43,9 @@ public class RegistCourse {
 	@OneToMany(mappedBy = "registCourse" , cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<RegistLecture> registLectures = new ArrayList<>();
 	
+	// 수강 강의 생성
+	public void addRegistLecture(RegistLecture registLecture) {
+        registLecture.setRegistCourse(this);
+        this.registLectures.add(registLecture);
+    }
 }

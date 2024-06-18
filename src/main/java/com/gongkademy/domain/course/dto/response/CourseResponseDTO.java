@@ -21,7 +21,7 @@ public class CourseResponseDTO {
 	private Long lectureCount;
 	private String content;
 	
-	// 해당 강좌 수강&저장 여부?(DTO 만들 떄 판단해서)
-//	private Boolean isRegistered;
-//	private Boolean isSaved;
+	// 해당 강좌 수강&저장 여부
+	private Boolean isRegistered;
+	private Boolean isSaved;
 }
