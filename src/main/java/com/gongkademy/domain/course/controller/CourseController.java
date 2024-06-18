@@ -60,8 +60,9 @@ public class CourseController {
 	
 	// - 강좌 조회
 	@GetMapping("/detail/{course_id}")
-	public ResponseEntity<?> getCourseDetail(){
-		
+	public ResponseEntity<?> getCourseDetail(@PathVariable("regist_course_id") Long id){
+		CourseResponseDTO courseResponseDTO = courseService.getCourseDetail(id);
+		return new ResponseEntity<>(courseResponseDTO, HttpStatus.OK);
 	}
 	
 	// - 최근 강의 조회

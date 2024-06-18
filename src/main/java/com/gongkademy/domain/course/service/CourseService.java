@@ -19,10 +19,13 @@ public interface CourseService {
 
 	void deleteRegistCourse(Long registCourseId);
 	
+	CourseResponseDTO getCourseDetail(Long courseId);
+	
 	/*
 	 * TODO
-	 * - 강좌 조회, 최근 강의 조회
+	 * - 최근 강의 조회
 	 * - 강좌 소개 조회, 공지사항 조회
 	 * */
+	
 	
 }

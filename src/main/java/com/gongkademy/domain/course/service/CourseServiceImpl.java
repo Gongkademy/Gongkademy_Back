@@ -69,6 +69,14 @@ public class CourseServiceImpl implements CourseService {
 		registCourseRepository.delete(registCourse);
 	}
 
+	@Override
+	public CourseResponseDTO getCourseDetail(Long courseId) {
+		Course course = courseRepository.findById(courseId)
+				.orElseThrow(() -> new IllegalArgumentException("강좌 찾을 수 없음"));
+		
+		CourseResponseDTO courseResponseDTO = this.convertToDTO(course);
+		return null;
+	}
 	
 	private RegistCourse converToEntityRegistCourse(CourseRequestDTO courseRequestDTO) {
 		Course course = courseRepository.findById(courseRequestDTO.getCourseId())
