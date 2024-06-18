@@ -15,7 +15,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Optional;
 
@@ -62,7 +61,6 @@ public class JWTUtil {
 
     /**
      * RefreshToken 생성 메서드
-     * 생성 후 redis에 저장
      */
     public String createRefreshToken(long id) {
         Date now = new Date();
@@ -81,17 +79,23 @@ public class JWTUtil {
                 .signWith(key)
                 .compact();
 
-        redisUtil.setData(String.valueOf(id), refreshToken);
-
         return refreshToken;
     }
 
     /**
-     * RefreshToken redis에 업데이트
+     * redis에 RefreshToken 저장(저장되어 있으면 새로 업데이트됨)
      */
-    public void updateRefreshToken(long id, String refreshToken) {
-        redisUtil.deleteData(String.valueOf(id));
-        redisUtil.setData(String.valueOf(id), refreshToken);
+    public void setRefreshToken(long id, String refreshToken) {
+        redisUtil.setDataExpire(String.valueOf(id), refreshToken, REFRESH_TOKEN_EXPIRATION_PERIOD);
+    }
+
+    /**
+     * RefreshToken 반환 메서드
+     * redis에 있는 RefreshToken을 반환
+     * 없다면 null 반환
+     */
+    public Optional<String> getRefreshToken(long id) {
+        return Optional.ofNullable(redisUtil.getData(String.valueOf(id)));
     }
 
     public void sendAccessToken(HttpServletResponse response, String accessToken) {
@@ -112,19 +116,6 @@ public class JWTUtil {
         return Optional.ofNullable(request.getHeader(HEADER))
                 .filter(refreshToken -> refreshToken.startsWith(BEARER))
                 .map(refreshToken -> refreshToken.replace(BEARER, ""));
-    }
-
-    /**
-     * refreshToken 검증
-     * 1. 토큰 자체 검증
-     * 2. redis에 있는 토큰과 비교
-    */
-    public boolean isRefreshTokenValid(String refreshToken) {
-        if (!isTokenValid(refreshToken)) return false;
-        int id = Integer.parseInt(validateToken(refreshToken).get(PK_CLAIM).toString());
-        String redisRefreshToken = redisUtil.getData(String.valueOf(id));
-
-        return refreshToken.equals(redisRefreshToken);
     }
 
     /**
