@@ -11,9 +11,11 @@ import com.gongkademy.domain.course.dto.request.CourseRequestDTO;
 import com.gongkademy.domain.course.dto.response.CourseResponseDTO;
 import com.gongkademy.domain.course.entity.Course;
 import com.gongkademy.domain.course.entity.Lecture;
+import com.gongkademy.domain.course.entity.Notice;
 import com.gongkademy.domain.course.entity.RegistCourse;
 import com.gongkademy.domain.course.entity.Scrap;
 import com.gongkademy.domain.course.repository.CourseRepository;
+import com.gongkademy.domain.course.repository.NoticeRepository;
 import com.gongkademy.domain.course.repository.RegistCourseRepository;
 import com.gongkademy.domain.course.repository.ScrapRepository;
 import com.gongkademy.domain.member.entity.Member;
@@ -30,6 +32,7 @@ public class CourseServiceImpl implements CourseService {
 	private final ScrapRepository scrapRepository;
 	private final MemberRepository memberRepository;
 	private final CourseRepository courseRepository;
+	private final NoticeRepository noticeRepository;
 
 	@Override
 	public List<CourseResponseDTO> getAllCourses() {
@@ -125,6 +128,12 @@ public class CourseServiceImpl implements CourseService {
 		scrap.setCourse(course);
 		scrap.setMember(member);
 		return scrap;
+	}
+
+	@Override
+	public List<Notice> getCourseNotices(Long courseId) {
+		 List<Notice> notices = noticeRepository.findByCourseId(courseId);
+		 return notices;
 	}
 	
 	

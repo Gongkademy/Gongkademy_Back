@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gongkademy.domain.course.dto.request.CourseRequestDTO;
 import com.gongkademy.domain.course.dto.response.CourseResponseDTO;
+import com.gongkademy.domain.course.entity.Notice;
 import com.gongkademy.domain.course.service.CourseService;
 
 import lombok.RequiredArgsConstructor;
@@ -89,8 +90,9 @@ public class CourseController {
 	
 	// - 공지사항 조회
 	@GetMapping("/notice/{course_id}")
-	public ResponseEntity<?> getCourseNotices(){
-		
+	public ResponseEntity<?> getCourseNotices(@PathVariable("course_id") Long id){
+		List<Notice> notices = courseService.getCourseNotices(id);
+		return new ResponseEntity<>(notices, HttpStatus.OK);
 	}
 	
 }

@@ -6,6 +6,7 @@ import com.gongkademy.domain.course.dto.request.CourseRequestDTO;
 import com.gongkademy.domain.course.dto.response.CourseResponseDTO;
 import com.gongkademy.domain.course.entity.Course;
 import com.gongkademy.domain.course.entity.Lecture;
+import com.gongkademy.domain.course.entity.Notice;
 
 public interface CourseService {
 
@@ -21,10 +22,13 @@ public interface CourseService {
 	
 	CourseResponseDTO getCourseDetail(Long courseId);
 	
+	List<Notice> getCourseNotices(Long courseId);
+	
+	
 	/*
 	 * TODO
 	 * - 최근 강의 조회
-	 * - 강좌 소개 조회, 공지사항 조회
+	 * - 강좌 소개 조회,
 	 * */
 	
 	
