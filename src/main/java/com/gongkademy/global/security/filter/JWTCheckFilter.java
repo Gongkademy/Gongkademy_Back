@@ -63,7 +63,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
         try {
             String accessToken = authHeaderStr.substring(7);
-            Map<String, Object> claims = JWTUtil.validateToken(accessToken);
+            Map<String, Object> claims = jwtUtil.validateToken(accessToken);
             log.info(claims);
 
             Optional<Long> userId = Optional.ofNullable(((Number) claims.get("pk")).longValue());
@@ -75,13 +75,13 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
             // Refresh Token 처리 로직 추가
             String refreshToken = request.getHeader("RefreshToken");
-            if (refreshToken != null && JWTUtil.isRefreshTokenValid(refreshToken)) {
+            if (refreshToken != null && jwtUtil.isRefreshTokenValid(refreshToken)) {
                 checkRefreshTokenAndReIssueAccessToken(response, refreshToken);
             } else {
                 checkAccessTokenAndAuthentication(request, response, filterChain);
             }
         } catch (Exception e) {
-            log.error("JWT 에러갖미 ======================", e);
+            log.error("JWT 에러 ======================", e);
             log.error(e.getMessage());
 
             Gson gson = new Gson();
@@ -116,13 +116,13 @@ public class JWTCheckFilter extends OncePerRequestFilter {
      * accessToken과 refreshToken 토큰 발급
      */
     private void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response, String refreshToken) {
-        if (JWTUtil.isTokenValid(refreshToken)) {
-            Map<String, Object> claims = JWTUtil.validateToken(refreshToken);
+        if (jwtUtil.isTokenValid(refreshToken)) {
+            Map<String, Object> claims = jwtUtil.validateToken(refreshToken);
             Long memberId = Long.parseLong(claims.get("pk").toString());
             String redisRefreshToken = redisUtil.getData(String.valueOf(memberId));
 
             if (refreshToken.equals(redisRefreshToken)) {
-                String reIssuedRefreshToken = JWTUtil.createRefreshToken(memberId);
+                String reIssuedRefreshToken = jwtUtil.createRefreshToken(memberId);
                 jwtUtil.updateRefreshToken(memberId, reIssuedRefreshToken); // static메소드로 바꾸지 않고 인스턴스 메소드 호출
             }
         }
@@ -133,7 +133,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
      * 재발급된 refreshToekn return
      */
     private String reIssueRefreshToken(Long memberId) {
-        String reIssuedRefreshToken = JWTUtil.createRefreshToken(memberId);
+        String reIssuedRefreshToken = jwtUtil.createRefreshToken(memberId);
         jwtUtil.updateRefreshToken(memberId, reIssuedRefreshToken);
         return reIssuedRefreshToken;
     }
@@ -145,9 +145,9 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         log.info("checkAccessTokenAndAuthentication() 호출");
 
         jwtUtil.extractToken(request)
-                .filter(JWTUtil::isTokenValid)
+                .filter(jwtUtil::isTokenValid)
                 .ifPresent(accessToken -> {
-                    Map<String, Object> claims = JWTUtil.validateToken(accessToken);
+                    Map<String, Object> claims = jwtUtil.validateToken(accessToken);
                     Long userId = ((Number) claims.get("pk")).longValue();
                     memberRepository.findById(userId).ifPresent(this::saveAuthentication);
                 });
