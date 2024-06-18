@@ -43,7 +43,7 @@ public class JWTUtil {
     /**
      * AccessToken 생성 메서드
      * */
-    public static String createAccessToken(long id) {
+    public String createAccessToken(long id) {
         Date now = new Date();
         SecretKey key = null;
         try {
@@ -65,7 +65,7 @@ public class JWTUtil {
      * RefreshToken 생성 메서드
      * 생성 후 redis에 저장
      */
-    public static String createRefreshToken(long id) {
+    public String createRefreshToken(long id) {
         Date now = new Date();
         SecretKey key = null;
         try {
@@ -95,6 +95,20 @@ public class JWTUtil {
         redisUtil.setData(String.valueOf(id), refreshToken);
     }
 
+    public void sendAccessToken(HttpServletResponse response, String accessToken) {
+        response.setStatus(HttpServletResponse.SC_OK);
+
+        setAccessTokenHeader(response, accessToken);
+        log.info("Access Token : {}", accessToken);
+    }
+
+    public void sendRefreshToken(HttpServletResponse response, String refreshToken) {
+        response.setStatus(HttpServletResponse.SC_OK);
+
+        setRefreshTokenHeader(response, refreshToken);
+        log.info("RefreshToken 헤더 설정 완료");
+    }
+
     private void setAccessTokenHeader(HttpServletResponse response, String accessToken) {
         response.setHeader(ACCESS_HEADER, accessToken);
     }
@@ -117,7 +131,7 @@ public class JWTUtil {
      * 1. 토큰 자체 검증
      * 2. redis에 있는 토큰과 비교
     */
-    public static boolean isRefreshTokenValid(String refreshToken) {
+    public boolean isRefreshTokenValid(String refreshToken) {
         if (!isTokenValid(refreshToken)) return false;
         int id = Integer.parseInt(validateToken(refreshToken).get(PK_CLAIM).toString());
         String redisRefreshToken = redisUtil.getData(String.valueOf(id));
@@ -128,7 +142,7 @@ public class JWTUtil {
     /**
     * token 검증
     */
-    public static boolean isTokenValid(String token) {
+    public boolean isTokenValid(String token) {
         try {
             SecretKey key = Keys.hmacShaKeyFor(JWT_KEY.getBytes("UTF-8"));
             Map<String, Object> claim = Jwts.parserBuilder()
@@ -151,7 +165,7 @@ public class JWTUtil {
     }
 
     // jwt토큰을 검증하는 역할
-    public static Map<String, Object> validateToken(String token) {
+    public Map<String, Object> validateToken(String token) {
         Map<String, Object> claim = null;
         try {
             SecretKey key = Keys.hmacShaKeyFor(JWT_KEY.getBytes("UTF-8"));
