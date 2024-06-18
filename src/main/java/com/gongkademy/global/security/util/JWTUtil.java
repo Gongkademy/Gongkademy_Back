@@ -119,6 +119,22 @@ public class JWTUtil {
                 .map(refreshToken -> refreshToken.replace(BEARER, ""));
     }
 
+    public Optional<Long> extractMemberId(String accessToken) {
+        SecretKey key = null;
+        try {
+            key = Keys.hmacShaKeyFor(JWT_KEY.getBytes("UTF-8"));
+            return Optional.ofNullable((Long) Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(accessToken)
+                    .getBody().get(PK_CLAIM));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
     /**
      * 토큰 만료 검증
      */
