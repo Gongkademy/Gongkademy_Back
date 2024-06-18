@@ -74,6 +74,8 @@ public class Course {
     }
 	
 	// 수강생 수 count
-	
+	public void setRegistCount() {
+        this.registCount = (long) registCourses.size();
+    }
 	
 }
