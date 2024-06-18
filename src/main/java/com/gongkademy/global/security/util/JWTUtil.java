@@ -26,8 +26,7 @@ public class JWTUtil {
 
     private static String JWT_KEY;
 
-    private static final String ACCESS_HEADER = "AccessToken";
-    private static final String REFRESH_HEADER = "AccessToken";
+    private static final String HEADER = "Authorization";
     private static final Long ACCESS_TOKEN_EXPIRATION_PERIOD = 1800000L; // 30분(임의 설정)
     private static final Long REFRESH_TOKEN_EXPIRATION_PERIOD = 604800000L; // 7일(임의 설정)
     private static final String PK_CLAIM = "pk";
@@ -102,26 +101,15 @@ public class JWTUtil {
         log.info("Access Token : {}", accessToken);
     }
 
-    public void sendRefreshToken(HttpServletResponse response, String refreshToken) {
-        response.setStatus(HttpServletResponse.SC_OK);
-
-        setRefreshTokenHeader(response, refreshToken);
-        log.info("RefreshToken 헤더 설정 완료");
-    }
-
     private void setAccessTokenHeader(HttpServletResponse response, String accessToken) {
-        response.setHeader(ACCESS_HEADER, accessToken);
-    }
-
-    private void setRefreshTokenHeader(HttpServletResponse response, String refreshToken) {
-        response.setHeader(REFRESH_HEADER, refreshToken);
+        response.setHeader(HEADER, accessToken);
     }
 
     /**
      * 헤더에서 Token 추출
      */
     public Optional<String> extractToken(HttpServletRequest request) {
-        return Optional.ofNullable(request.getHeader("Authorization"))
+        return Optional.ofNullable(request.getHeader(HEADER))
                 .filter(refreshToken -> refreshToken.startsWith(BEARER))
                 .map(refreshToken -> refreshToken.replace(BEARER, ""));
     }
