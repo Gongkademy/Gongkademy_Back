@@ -69,18 +69,34 @@ public class Course {
 	private List<CourseReview> courseReviews = new ArrayList<>();
 	
 	// 수강평수 count
-	public void setReviewCount() {
+	public void updateReviewCount() {
         this.reviewCount = (long) courseReviews.size();
     }
 	
 	// 수강생 수 count
-	public void setRegistCount() {
+	public void updateRegistCount() {
         this.registCount = (long) registCourses.size();
     }
 	
 	// lecture 수 count
-	public void setLectureCount() {
+	public void updateLectureCount() {
         this.lectureCount = (long) lectures.size();
     }
+	
+	// 평점 평균 구하기
+	public void updateAvgRating() {
+		double avg = 0;
+		
+		if (courseReviews.isEmpty()) this.avgRating = avg;
+		
+		else {
+			for (CourseReview review : courseReviews) {
+		        avg += review.getRating();
+		    }
+			
+			this.avgRating = avg / courseReviews.size();
+		}
+		
+	}
 	
 }

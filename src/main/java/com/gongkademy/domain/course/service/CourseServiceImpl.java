@@ -48,8 +48,12 @@ public class CourseServiceImpl implements CourseService {
 		
 		registCourseRepository.save(registCourse);
 		
-		// responseDTO 생성
-		return null;
+		// 수강생 수 update
+		Optional<Course> course = courseRepository.findById(courseRequestDTO.getCourseId());
+		course.get().updateLectureCount();
+		
+		CourseResponseDTO courseResponseDTO = this.convertToDTO(course.get());
+		return courseResponseDTO;
 	}
 
 	@Override
@@ -57,8 +61,9 @@ public class CourseServiceImpl implements CourseService {
 		Scrap scrap = this.convertToEntityScrap(courseRequestDTO);
 		scrapRepository.save(scrap);
 		
-		// responseDTO 생성
-		return null;
+		Optional<Course> course = courseRepository.findById(courseRequestDTO.getCourseId());
+		CourseResponseDTO courseResponseDTO = this.convertToDTO(course.get());
+		return courseResponseDTO;
 	}
 
 	@Override
@@ -75,9 +80,21 @@ public class CourseServiceImpl implements CourseService {
 				.orElseThrow(() -> new IllegalArgumentException("강좌 찾을 수 없음"));
 		
 		CourseResponseDTO courseResponseDTO = this.convertToDTO(course);
-		return null;
+		return courseResponseDTO;
 	}
 	
+	private CourseResponseDTO convertToDTO(Course course) {
+		CourseResponseDTO courseResponseDTO = new CourseResponseDTO();
+		courseResponseDTO.setCourseId(course.getId());
+		courseResponseDTO.setTotalCourseTime(course.getTotalCourseTime());
+		courseResponseDTO.setAvgRating(course.getAvgRating());
+		courseResponseDTO.setReviewCount(course.getReviewCount());
+		courseResponseDTO.setCourseId(course.getId());
+		courseResponseDTO.setCourseId(course.getId());
+
+		return courseResponseDTO;
+	}
+
 	private RegistCourse converToEntityRegistCourse(CourseRequestDTO courseRequestDTO) {
 		Course course = courseRepository.findById(courseRequestDTO.getCourseId())
 				.orElseThrow(() -> new IllegalArgumentException("강좌 찾을 수 없음"));
@@ -85,7 +102,6 @@ public class CourseServiceImpl implements CourseService {
 		Member member = memberRepository.findById(courseRequestDTO.getMemberId())
 				.orElseThrow(() -> new IllegalArgumentException("회원 찾을 수 없음"));
 		
-		// 수강 강좌 초기화
 		RegistCourse registCourse = new RegistCourse();
 		registCourse.setCourse(course);
 		registCourse.setMember(member);
@@ -99,7 +115,6 @@ public class CourseServiceImpl implements CourseService {
 		Member member = memberRepository.findById(courseRequestDTO.getMemberId())
 				.orElseThrow(() -> new IllegalArgumentException("회원 찾을 수 없음"));
 		
-		// 강좌 저장 초기화
 		Scrap scrap = new Scrap();
 		scrap.setCourse(course);
 		scrap.setMember(member);
