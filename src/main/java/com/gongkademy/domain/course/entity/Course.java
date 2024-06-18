@@ -33,7 +33,7 @@ public class Course {
 	
 	private Long registCount;
 	
-	private int lectureCount;
+	private Long lectureCount;
 	
 	private String content;
 	
@@ -76,6 +76,11 @@ public class Course {
 	// 수강생 수 count
 	public void setRegistCount() {
         this.registCount = (long) registCourses.size();
+    }
+	
+	// lecture 수 count
+	public void setLectureCount() {
+        this.lectureCount = (long) lectures.size();
     }
 	
 }
