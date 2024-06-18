@@ -71,21 +71,16 @@ public class CourseController {
 		return new ResponseEntity<>(courseResponseDTO, HttpStatus.OK);
 	}
 	
-	// - 최근 강의 조회
-//	@GetMapping("/recent-lecture/{course_id}")
-//	public ResponseEntity<?> getRecentLecture(){
-//		player controller로 변경
-//	}
+	/* TODO 
+	 * - 강좌 소개 조회, 강의 자료 다운로드
+	 * - 공지사항 페이지네이션
+	 * */ 
 	
-	// - 강좌 소개 조회
-	/* TODO
-	 * 선수과목
-	 * 강의 소개
-	 * 강의 링크
-	 * 사진
-	 * */
 	@GetMapping("/info/{course_id}")
 	public ResponseEntity<?> getCourseInfo(){
+		/* 
+		 * 선수과목,강의 소개,강의 링크,사진
+		 * */
 		return null;
 	}
 	
@@ -95,5 +90,4 @@ public class CourseController {
 		List<Notice> notices = courseService.getCourseNotices(id);
 		return new ResponseEntity<>(notices, HttpStatus.OK);
 	}
-	
 }

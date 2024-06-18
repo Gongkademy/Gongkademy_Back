@@ -63,7 +63,6 @@ public class CourseServiceImpl implements CourseService {
 		List<Lecture> lectures = lectureRepository.findByCourseId(courseId);
 		List<CourseContentsResponseDTO> courseContentsDTOs = new ArrayList<>();
 		
-		// TODO lecture complete인지 확인
 		for(Lecture lecture : lectures) {
 			CourseContentsResponseDTO dto = this.convertToDToContents(lecture);
 		
@@ -196,6 +195,4 @@ public class CourseServiceImpl implements CourseService {
 		scrap.setMember(member);
 		return scrap;
 	}
-	
-	
 }
