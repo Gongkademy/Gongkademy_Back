@@ -1,5 +1,7 @@
 package com.gongkademy.domain.course.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,7 +29,8 @@ public class CourseController {
 	// - 전체 강좌 목록 조회
 	@GetMapping("")
 	public ResponseEntity<?> getAllCourses(){
-		
+		List<CourseResponseDTO> courseResponseDTOs = courseService.getAllCourses();
+		return new ResponseEntity<>(courseResponseDTOs, HttpStatus.OK);
 	}
 	
 	// - 목차 조회
@@ -65,15 +68,22 @@ public class CourseController {
 		return new ResponseEntity<>(courseResponseDTO, HttpStatus.OK);
 	}
 	
-	// - 최근 강의 조회
-	@GetMapping("/recent-lecture/{course_id}")
-	public ResponseEntity<?> getRecentLecture(){
-		
-	}
-	
+//	// - 최근 강의 조회
+//	@GetMapping("/recent-lecture/{course_id}")
+//	public ResponseEntity<?> getRecentLecture(){
+//		필요한가?
+//	}
+//	
 	// - 강좌 소개 조회
+	/*
+	 * 선수과목
+	 * 강의 소개
+	 * 강의 링크
+	 * 사진
+	 * */
 	@GetMapping("/info/{course_id}")
 	public ResponseEntity<?> getCourseInfo(){
+		
 		
 	}
 	

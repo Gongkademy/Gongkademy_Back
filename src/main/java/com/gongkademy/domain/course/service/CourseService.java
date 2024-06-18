@@ -9,7 +9,7 @@ import com.gongkademy.domain.course.entity.Lecture;
 
 public interface CourseService {
 
-	List<Course> getAllCourses();
+	List<CourseResponseDTO> getAllCourses();
 	
 	List<Lecture> getCourseContents();
 	

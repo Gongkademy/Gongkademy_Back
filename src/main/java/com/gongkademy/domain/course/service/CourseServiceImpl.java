@@ -1,5 +1,6 @@
 package com.gongkademy.domain.course.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,9 +32,14 @@ public class CourseServiceImpl implements CourseService {
 	private final CourseRepository courseRepository;
 
 	@Override
-	public List<Course> getAllCourses() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<CourseResponseDTO> getAllCourses() {
+		List<CourseResponseDTO> courseResponseDTOs = new ArrayList<>();
+		
+		List<Course> courses = courseRepository.findAll();
+		for(Course course : courses) {
+			courseResponseDTOs.add(this.convertToDTO(course));
+		}
+		return courseResponseDTOs;
 	}
 
 	@Override
