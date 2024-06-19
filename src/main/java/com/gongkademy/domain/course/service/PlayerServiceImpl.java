@@ -63,6 +63,15 @@ public class PlayerServiceImpl implements PlayerService{
 
 		registLecture.setSavePoint(playerRequestDTO.getSavePoint());
 		registLecture.setRecentDate(LocalDateTime.now());
+		
+		Optional<Lecture> lecture = lectureRepository.findById(lectureId);
+		
+		if(lecture.get().getTime() == registLecture.getSavePoint()) {
+			registLecture.updateComplete();
+			
+			// TODO : 강좌 진행률 업데이트
+		}
+		
 		registLectureRepository.save(registLecture);
 	}
 

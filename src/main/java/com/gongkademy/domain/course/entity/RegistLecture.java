@@ -42,4 +42,8 @@ public class RegistLecture {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="member_id")
 	private Member member;
+
+	public void updateComplete() {
+		this.complete = true;
+	}
 }
