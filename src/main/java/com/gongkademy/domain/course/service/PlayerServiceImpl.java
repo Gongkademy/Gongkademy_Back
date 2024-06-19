@@ -1,5 +1,6 @@
 package com.gongkademy.domain.course.service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -61,6 +62,7 @@ public class PlayerServiceImpl implements PlayerService{
 				.orElseThrow(() -> new IllegalArgumentException("수강 강의 찾을 수 없음"));
 
 		registLecture.setSavePoint(playerRequestDTO.getSavePoint());
+		registLecture.setRecentDate(LocalDateTime.now());
 		registLectureRepository.save(registLecture);
 	}
 
