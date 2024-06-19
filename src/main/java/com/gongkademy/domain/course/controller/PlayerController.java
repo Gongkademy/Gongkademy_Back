@@ -23,10 +23,19 @@ public class PlayerController {
 
 	private final PlayerService playerService;
 	
+	// 강좌에 대한 최근 수강 구간 반환
 	@GetMapping("/{course_id}")
-	public ResponseEntity<?> getPlayerLatest(@PathVariable("course_id") Long courseId, @RequestBody Long memberId){
+	public ResponseEntity<?> getPlayerLatestCourse(@PathVariable("course_id") Long courseId, @RequestBody Long memberId){
 		// 가장 최근 강의와 최근 수강 구간 반환
-		PlayerResponseDTO playerResponseDTO = playerService.getPlayerLatest(courseId, memberId);
+		PlayerResponseDTO playerResponseDTO = playerService.getPlayerLatestCourse(courseId, memberId);
+        return ResponseEntity.ok(playerResponseDTO);
+	}
+	
+	// 강의에 대한 최근 수강 구간 반환
+	@GetMapping("/{lecture_id}")
+	public ResponseEntity<?> getPlayerLatestLecture(@PathVariable("lecture_id") Long lectureId, @RequestBody Long memberId){
+		// 가장 최근 강의와 최근 수강 구간 반환
+		PlayerResponseDTO playerResponseDTO = playerService.getPlayerLatestLecture(lectureId, memberId);
         return ResponseEntity.ok(playerResponseDTO);
 	}
 	

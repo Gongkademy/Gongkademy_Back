@@ -18,8 +18,8 @@ public interface RegistLectureRepository extends JpaRepository<RegistLecture, Lo
 	// 수강 강의 id로 수강 강의 조회
 	Optional<RegistLecture> findById(Long id);
 		
-	// TODO 수정
-//	Optional<RegistLecture> findByLectureId(Long id);
+	// memberId, lectureId로 수강 강의 조회
+	Optional<RegistLecture> findByLectureIdAndMemberId(Long lectureId, Long membeId);
 
 	Boolean existsByMemberIdAndLectureIdAndComplete(Long memberId, Long LectureId, boolean complete);
 

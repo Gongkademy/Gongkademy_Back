@@ -25,9 +25,7 @@ public class PlayerServiceImpl implements PlayerService{
 	private final RegistLectureRepository registLectureRepository;
 	
 	@Override
-	public PlayerResponseDTO getPlayerLatest(Long courseId, Long memberId) {
-		// 강의수강내역 가장 최근 구간
-				
+	public PlayerResponseDTO getPlayerLatestCourse(Long courseId, Long memberId) {				
 		// 수강 강의 중 가장 최근 수강 강의 조회
 		RegistCourse registCourse = registCourseRepository.findByCourseIdAndMemberId(courseId, memberId)
 				.orElseThrow(() -> new IllegalArgumentException("수강 강좌 찾을 수 없음"));;
@@ -40,6 +38,21 @@ public class PlayerServiceImpl implements PlayerService{
 		
 		return playerResponseDTO;
 	}
+	
+	@Override
+	public PlayerResponseDTO getPlayerLatestLecture(Long lectureId, Long memberId) {				
+		// 수강 강의 중 가장 최근 수강 강의 조회
+		RegistLecture registLectureLatest = registLectureRepository.findByLectureIdAndMemberId(lectureId, memberId)
+				.orElseThrow(() -> new IllegalArgumentException("수강 강의 찾을 수 없음"));
+
+		Lecture lecture = lectureRepository.findById(registLectureLatest.getLecture().getId())
+				.orElseThrow(() -> new IllegalArgumentException("강의 찾을 수 없음"));
+		
+		PlayerResponseDTO playerResponseDTO = this.convertToDTO(lecture, registLectureLatest);
+		
+		return playerResponseDTO;
+	}
+
 
 	@Override
 	public void updatePlayerLatest(PlayerRequestDTO playerRequestDTO) {
