@@ -5,7 +5,7 @@ import com.gongkademy.domain.course.dto.response.PlayerResponseDTO;
 
 public interface PlayerService {
 
-	PlayerResponseDTO getPlayerLatest(Long id);
+	PlayerResponseDTO getPlayerLatest(Long courseId, Long memberId);
 	
 	void updatePlayerLatest(PlayerRequestDTO playerRequestDTO);
 	

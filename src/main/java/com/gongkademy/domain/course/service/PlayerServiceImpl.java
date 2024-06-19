@@ -1,6 +1,5 @@
 package com.gongkademy.domain.course.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -9,8 +8,10 @@ import com.gongkademy.domain.course.dto.request.PlayerRequestDTO;
 import com.gongkademy.domain.course.dto.response.PlayerResponseDTO;
 import com.gongkademy.domain.course.entity.Course;
 import com.gongkademy.domain.course.entity.Lecture;
+import com.gongkademy.domain.course.entity.RegistCourse;
 import com.gongkademy.domain.course.entity.RegistLecture;
 import com.gongkademy.domain.course.repository.LectureRepository;
+import com.gongkademy.domain.course.repository.RegistCourseRepository;
 import com.gongkademy.domain.course.repository.RegistLectureRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -20,17 +21,22 @@ import lombok.RequiredArgsConstructor;
 public class PlayerServiceImpl implements PlayerService{
 	
 	private final LectureRepository lectureRepository;
+	private final RegistCourseRepository registCourseRepository;
 	private final RegistLectureRepository registLectureRepository;
 	
 	@Override
-	public PlayerResponseDTO getPlayerLatest(Long id) {
+	public PlayerResponseDTO getPlayerLatest(Long courseId, Long memberId) {
 		// 강의수강내역 가장 최근 구간
 				
 		// 수강 강의 중 가장 최근 수강 강의 조회
-		Optional<RegistLecture> registLecture = registLectureRepository.findTopByRegistCourseIdOrderByRecentDateDescLectureLectureOrderAsc(id);
-		Optional<Lecture> lecture = lectureRepository.findById(registLecture.get().getLecture().getId());
+		RegistCourse registCourse = registCourseRepository.findByCourseIdAndMemberId(courseId, memberId)
+				.orElseThrow(() -> new IllegalArgumentException("수강 강좌 찾을 수 없음"));;
+		RegistLecture registLectureLatest = registLectureRepository.findTopByRegistCourseIdOrderByRecentDateDescLectureLectureOrderAsc(registCourse.getId())
+				.orElseThrow(() -> new IllegalArgumentException("최근 수강 강의 찾을 수 없음"));
+		Lecture lecture = lectureRepository.findById(registLectureLatest.getLecture().getId())
+				.orElseThrow(() -> new IllegalArgumentException("강의 찾을 수 없음"));
 		
-		PlayerResponseDTO playerResponseDTO = this.convertToDTO(lecture.get(), registLecture.get());
+		PlayerResponseDTO playerResponseDTO = this.convertToDTO(lecture, registLectureLatest);
 		
 		return playerResponseDTO;
 	}
@@ -82,7 +88,7 @@ public class PlayerServiceImpl implements PlayerService{
 	private PlayerResponseDTO convertToDTO(Lecture lecture, RegistLecture registLecture) {
 		PlayerResponseDTO dto = new PlayerResponseDTO();
 		
-		dto.setRegistLectureId(registLecture.getId());
+		dto.setMemberId(registLecture.getMember().getId());
 		dto.setSavePoint(registLecture.getSavePoint());
 		dto.setRecentDate(registLecture.getRecentDate());
 		dto.setLectureId(lecture.getId());
