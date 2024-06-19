@@ -144,4 +144,36 @@ class BoardServiceImplTest {
         verify(boardRepository, times(1)).save(board);
     }
 
+    // 스크랩 추가
+    @Test
+    void toggleScrapBoard_AddScrap() {
+        when(boardRepository.findById(anyLong())).thenReturn(Optional.of(board));
+        when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
+        // 스크랩 한 적이 없어야 하므로 empty반환해야함
+        when(pickRepository.findByBoardAndMemberAndPickType(any(Board.class), any(Member.class), any(PickType.class))).thenReturn(Optional.empty());
+
+        boardService.toggleScrapBoard(7L, 6L);
+
+        assertEquals(124L + 1L, board.getScrapCount());
+        verify(pickRepository, times(1)).save(any(Pick.class));
+        verify(boardRepository, times(1)).save(board);
+    }
+
+
+    // 스크랩 제거
+    @Test
+    void toggleScrapBoard_RemoveScrap() {
+        Pick pick = new Pick(board, member, PickType.SCRAP);
+
+        when(boardRepository.findById(anyLong())).thenReturn(Optional.of(board));
+        when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
+        // 스크랩이 이미 되어있으므로 pick객체 정보 반환
+        when(pickRepository.findByBoardAndMemberAndPickType(any(Board.class), any(Member.class), any(PickType.class))).thenReturn(Optional.of(pick));
+
+        boardService.toggleScrapBoard(7L, 6L);
+
+        assertEquals(124 - 1L, board.getScrapCount());
+        verify(pickRepository, times(1)).delete(pick);
+        verify(boardRepository, times(1)).save(board);
+    }
 }
