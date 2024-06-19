@@ -51,7 +51,7 @@ public class PlayerController {
 	public ResponseEntity<?> getPlayerNext(@RequestBody PlayerRequestDTO playerRequestDTO){	
 		// 다음강의 있으면 반환
 		
-		PlayerResponseDTO playerResponseDTO = playerService.getPlayerNext(playerRequestDTO);
+		PlayerResponseDTO playerResponseDTO = playerService.getPlayerNextPrev(playerRequestDTO, 1);
         if(playerResponseDTO == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
 		return ResponseEntity.ok(playerResponseDTO);
 	}
@@ -60,7 +60,7 @@ public class PlayerController {
 	public ResponseEntity<?> getPlayerPrev(@RequestBody PlayerRequestDTO playerRequestDTO){
 		// 이전강의 있으면 반환
 
-		PlayerResponseDTO playerResponseDTO = playerService.getPlayerPrev(playerRequestDTO);
+		PlayerResponseDTO playerResponseDTO = playerService.getPlayerNextPrev(playerRequestDTO, 2);
         if(playerResponseDTO == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
 		return ResponseEntity.ok(playerResponseDTO);
 	}

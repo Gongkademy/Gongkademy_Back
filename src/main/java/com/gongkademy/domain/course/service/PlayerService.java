@@ -11,7 +11,5 @@ public interface PlayerService {
 	
 	void updatePlayerLatest(PlayerRequestDTO playerRequestDTO);
 	
-	PlayerResponseDTO getPlayerNext(PlayerRequestDTO playerRequestDTO);
-
-	PlayerResponseDTO getPlayerPrev(PlayerRequestDTO playerRequestDTO);
+	PlayerResponseDTO getPlayerNextPrev(PlayerRequestDTO playerRequestDTO, int dir);
 }

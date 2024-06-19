@@ -65,42 +65,33 @@ public class PlayerServiceImpl implements PlayerService{
 	}
 
 	@Override
-	public PlayerResponseDTO getPlayerNext(PlayerRequestDTO playerRequestDTO) {
+	public PlayerResponseDTO getPlayerNextPrev(PlayerRequestDTO playerRequestDTO, int dir) {
 		
-		Optional<Lecture> lecture = lectureRepository.findById(playerRequestDTO.getLectureId());
-		Course course = lecture.get().getCourse();
-		int order = lecture.get().getLectureOrder();
+		Lecture lecture = lectureRepository.findById(playerRequestDTO.getLectureId())
+				.orElseThrow(() -> new IllegalArgumentException("강의 찾을 수 없음"));
+		Course course = lecture.getCourse();
+		int order = lecture.getLectureOrder();
 		
-		Optional<Lecture> nextLecture = lectureRepository.findByCourseIdAndLectureOrder(course.getId(), order+1);
+		Lecture targetLecture = null;
 		
-		if (!nextLecture.isPresent()) throw new IllegalStateException("다음 강의 없음");
+		if(dir == 1) {
+			targetLecture = lectureRepository.findByCourseIdAndLectureOrder(course.getId(), order+1)
+					.orElseThrow(() -> new IllegalArgumentException("다음 강의 없음"));
+		}
 		
+		else if(dir == 2) {
+			targetLecture = lectureRepository.findByCourseIdAndLectureOrder(course.getId(), order-1)
+					.orElseThrow(() -> new IllegalArgumentException("이전 강의 없음"));
+		}
 		
-		Optional<RegistLecture> registNextLecture = registLectureRepository.findByLectureId(nextLecture.get().getId());
-		
-		PlayerResponseDTO playerResponseDTO = this.convertToDTO(nextLecture.get(), registNextLecture.get());
+		RegistLecture registNextLecture = registLectureRepository.findByLectureIdAndMemberId(targetLecture.getId(), playerRequestDTO.getMemberId())
+					.orElseThrow(() -> new IllegalArgumentException("수강 강의 찾을 수 없음"));
+
+		PlayerResponseDTO playerResponseDTO = this.convertToDTO(targetLecture, registNextLecture);
 
 		return playerResponseDTO;
 	}
 
-	@Override
-	public PlayerResponseDTO getPlayerPrev(PlayerRequestDTO playerRequestDTO) {
-		
-		Optional<Lecture> lecture = lectureRepository.findById(playerRequestDTO.getLectureId());
-		Course course = lecture.get().getCourse();
-		int order = lecture.get().getLectureOrder();
-		
-		Optional<Lecture> prevLecture = lectureRepository.findByCourseIdAndLectureOrder(course.getId(), order-1);
-		
-		if (!prevLecture.isPresent()) throw new IllegalStateException("이전 강의 없음");
-		
-		
-		Optional<RegistLecture> registNextLecture = registLectureRepository.findByLectureId(prevLecture.get().getId());
-		
-		PlayerResponseDTO playerResponseDTO = this.convertToDTO(prevLecture.get(), registNextLecture.get());
-
-		return playerResponseDTO;
-	}
 
 	private PlayerResponseDTO convertToDTO(Lecture lecture, RegistLecture registLecture) {
 		PlayerResponseDTO dto = new PlayerResponseDTO();
