@@ -39,10 +39,9 @@ public class PlayerController {
         return ResponseEntity.ok(playerResponseDTO);
 	}
 	
+	// 강의 수강 내역 저장
 	@PatchMapping("")
 	public ResponseEntity<?> updatePlayerLatest(@RequestBody PlayerRequestDTO playerRequestDTO){
-		// 강의 수강 내역 저장
-		
 		playerService.updatePlayerLatest(playerRequestDTO);
 		
 		return new ResponseEntity<>(HttpStatus.OK);

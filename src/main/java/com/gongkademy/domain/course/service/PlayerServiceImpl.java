@@ -53,11 +53,15 @@ public class PlayerServiceImpl implements PlayerService{
 		return playerResponseDTO;
 	}
 
-
 	@Override
 	public void updatePlayerLatest(PlayerRequestDTO playerRequestDTO) {
-		Optional<RegistLecture> registLecture = registLectureRepository.findById(playerRequestDTO.getRegistLectureId());
-		registLecture.get().setSavePoint(playerRequestDTO.getSavePoint());
+		Long lectureId = playerRequestDTO.getLectureId();
+		Long memberId = playerRequestDTO.getMemberId();
+		RegistLecture registLecture = registLectureRepository.findByLectureIdAndMemberId(lectureId, memberId)
+				.orElseThrow(() -> new IllegalArgumentException("수강 강의 찾을 수 없음"));
+
+		registLecture.setSavePoint(playerRequestDTO.getSavePoint());
+		registLectureRepository.save(registLecture);
 	}
 
 	@Override
