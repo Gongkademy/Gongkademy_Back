@@ -22,6 +22,7 @@ public class BoardController {
 
     private final int LIMIT = 3;
 
+    // 공지사항 상세보기
     @GetMapping("/notice/{articleId}")
     public ResponseEntity<?> getBoard(@PathVariable Long articleId) {
         BoardResponseDTO boardResponseDTO = boardService.getBoard(articleId);
