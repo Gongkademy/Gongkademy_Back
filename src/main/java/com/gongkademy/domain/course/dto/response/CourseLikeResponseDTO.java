@@ -1,4 +1,4 @@
-package com.gongkademy.domain.course.dto.request;
+package com.gongkademy.domain.course.dto.response;
 
 import com.gongkademy.domain.course.entity.CourseLikeCateg;
 
@@ -11,8 +11,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourseLikeRequestDTO {
-
+public class CourseLikeResponseDTO {
+	
+	private Long courseLikeId;
 	private CourseLikeCateg likeCateg;
 	private Long memberId;
 	private Long courseReviewId;
