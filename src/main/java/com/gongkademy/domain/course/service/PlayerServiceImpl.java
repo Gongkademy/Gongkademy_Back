@@ -11,6 +11,7 @@ import com.gongkademy.domain.course.entity.Course;
 import com.gongkademy.domain.course.entity.Lecture;
 import com.gongkademy.domain.course.entity.RegistCourse;
 import com.gongkademy.domain.course.entity.RegistLecture;
+import com.gongkademy.domain.course.repository.CourseRepository;
 import com.gongkademy.domain.course.repository.LectureRepository;
 import com.gongkademy.domain.course.repository.RegistCourseRepository;
 import com.gongkademy.domain.course.repository.RegistLectureRepository;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class PlayerServiceImpl implements PlayerService{
 	
 	private final LectureRepository lectureRepository;
+	private final CourseRepository courseRepository;
 	private final RegistCourseRepository registCourseRepository;
 	private final RegistLectureRepository registLectureRepository;
 	
@@ -109,6 +111,14 @@ public class PlayerServiceImpl implements PlayerService{
 		dto.setTime(lecture.getTime());
 		dto.setLink(lecture.getLink());
 		dto.setTitle(lecture.getTitle());
+	
+		Optional<RegistCourse> registCourse = registCourseRepository.findById(registLecture.getRegistCourse().getId());
+		Optional<Course> course = courseRepository.findById(lecture.getCourse().getId());
+		
+		dto.setProgressTime(registCourse.get().getProgressTime());
+		dto.setProgressPercent(registCourse.get().getProgressPercent());
+		dto.setTotalCourseTime(course.get().getTotalCourseTime());
+
 		return dto;
 	}
 }
