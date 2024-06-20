@@ -61,16 +61,12 @@ public class PlayerServiceImpl implements PlayerService{
 		RegistLecture registLecture = registLectureRepository.findByLectureIdAndMemberId(lectureId, memberId)
 				.orElseThrow(() -> new IllegalArgumentException("수강 강의 찾을 수 없음"));
 
-		registLecture.setSavePoint(playerRequestDTO.getSavePoint());
-		registLecture.setRecentDate(LocalDateTime.now());
+		registLecture.updateSavePoint(playerRequestDTO.getSavePoint());
+		registLecture.updateRegistCourse();
 		
 		Optional<Lecture> lecture = lectureRepository.findById(lectureId);
 		
-		if(lecture.get().getTime() == registLecture.getSavePoint()) {
-			registLecture.updateComplete();
-			
-			// TODO : 강좌 진행률 업데이트
-		}
+		if(lecture.get().getTime() == registLecture.getSavePoint()) registLecture.updateComplete();
 		
 		registLectureRepository.save(registLecture);
 	}
@@ -102,7 +98,6 @@ public class PlayerServiceImpl implements PlayerService{
 
 		return playerResponseDTO;
 	}
-
 
 	private PlayerResponseDTO convertToDTO(Lecture lecture, RegistLecture registLecture) {
 		PlayerResponseDTO dto = new PlayerResponseDTO();
