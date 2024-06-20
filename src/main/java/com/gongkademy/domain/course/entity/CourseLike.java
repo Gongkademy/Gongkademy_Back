@@ -27,8 +27,8 @@ public class CourseLike {
 	private CourseLikeCateg likeCateg; // 좋아요카테고리 [COMMENT, REVIEW]
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "notice_id")
-	private Notice notice;
+	@JoinColumn(name = "course_review_id")
+	private CourseReview courseReview;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "course_comment_id")

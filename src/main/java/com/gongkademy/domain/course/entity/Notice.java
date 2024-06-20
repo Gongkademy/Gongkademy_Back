@@ -36,18 +36,10 @@ public class Notice {
 	@OneToMany(mappedBy = "notice")
 	private List<CourseComment> courseComments = new ArrayList<>();
 
-	@OneToMany(mappedBy = "notice")
-	private List<CourseLike> courseLikes = new ArrayList<>();
-
 	// ==연관관계 메서드==//
 	public void addCourseComment(CourseComment courseComment) {
 		courseComments.add(courseComment);
 		courseComment.setNotice(this);
-	}
-
-	public void addCourseLike(CourseLike courseLike) {
-		courseLikes.add(courseLike);
-		courseLike.setNotice(this);
 	}
 
 	// 댓글 수
