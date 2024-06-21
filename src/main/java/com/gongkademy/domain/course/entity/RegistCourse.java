@@ -37,18 +37,19 @@ public class RegistCourse {
 	private Course course;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="id")
+	@JoinColumn(name="member_id")
 	private Member member;
 	
-	@OneToMany(mappedBy = "registCourse" , cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "registCourse" ,cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<RegistLecture> registLectures = new ArrayList<>();
 	
 	// 수강 강의 생성
 	public void addRegistLecture(RegistLecture registLecture) {
-        registLecture.setRegistCourse(this);
         this.registLectures.add(registLecture);
+        registLecture.setRegistCourse(this);
     }
 
+	// 진행률 업데이트
 	public void updateProgress() {
 		this.progressTime = registLectures.stream()
 				.mapToLong(RegistLecture::getMaxTime)
