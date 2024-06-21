@@ -153,10 +153,25 @@ public class CourseServiceImpl implements CourseService {
 		Scrap scrap = this.convertToEntityScrap(courseRequestDTO);
 		
 		Optional<Course> course = courseRepository.findById(courseRequestDTO.getCourseId());
-		course.get().addScrap(scrap);
+		Boolean isSaved = scrapRepository.existsByMemberIdAndCourseId(currentMemberId, course.get().getId());
 		
-		CourseResponseDTO courseResponseDTO = this.convertToDTO(course.get());
-		return courseResponseDTO;
+		CourseResponseDTO dto = this.convertToDTO(course.get());
+		// 저장 -> 저장 삭제
+		if(isSaved) {
+			course.get().addScrap(scrap);
+			dto.setIsSaved(false);
+		}
+		else {
+			course.get().deleteScrap(scrap);
+			dto.setIsSaved(true);
+		}
+		
+		//수강여부 확인
+		Boolean isRegistered = registCourseRepository.existsByMemberIdAndCourseId(currentMemberId, course.get().getId());
+		if(isRegistered) dto.setIsRegistered(true);
+		else dto.setIsRegistered(false);
+		
+		return dto;
 	}
 
 	@Override
