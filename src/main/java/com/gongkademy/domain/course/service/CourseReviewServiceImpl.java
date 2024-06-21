@@ -37,16 +37,11 @@ public class CourseReviewServiceImpl implements CourseReviewService {
 	public CourseReviewResponseDTO createReview(CourseReviewRequestDTO courseReviewRequestDTO, Long currentMemberId) {
 		CourseReview review = convertToEntity(courseReviewRequestDTO);
 		review.setMember(memberRepository.findById(currentMemberId).get());
-		CourseReview saveReview = courseReviewRepository.save(review);
-		
-		// 수강평 수 update
-		// 평점 평균 update
+
 		Optional<Course> course = courseRepository.findById(courseReviewRequestDTO.getCourseId());
-		course.get().addReveiw(saveReview);
-		course.get().updateReviewCount();
-		course.get().updateAvgRating();
+		course.get().addReveiw(review);
 		
-		return convertToDTO(saveReview);
+		return convertToDTO(review);
 	}
 
 	@Override
@@ -84,17 +79,12 @@ public class CourseReviewServiceImpl implements CourseReviewService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteReview(Long id) {
 		Optional<CourseReview> review = courseReviewRepository.findById(id);
 		Course course = review.get().getCourse();
 		
-		// 수강평 수 update
-		// 평점 평균 update
 		course.deleteReveiw(review.get());
-		course.updateReviewCount();
-		course.updateAvgRating();
-		
-		courseReviewRepository.deleteById(id);
 	}
 
 	private CourseReview convertToEntity(CourseReviewRequestDTO courseReviewRequestDTO) {

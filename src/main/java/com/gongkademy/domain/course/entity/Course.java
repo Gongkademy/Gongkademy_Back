@@ -61,12 +61,6 @@ public class Course {
 	
 	@OneToMany(mappedBy="course" , cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CourseReview> courseReviews = new ArrayList<>();
-	
-//	@OneToMany(mappedBy="preCourse" , cascade = CascadeType.ALL, orphanRemoval = true)
-//	private List<PreCourse> preCourses = new ArrayList<>();
-//	
-//	@OneToMany(mappedBy="nextCourse" , cascade = CascadeType.ALL, orphanRemoval = true)
-//	private List<PreCourse> nextCourses = new ArrayList<>();
 
 	// ==연관관계 메서드==//
 	//== add ==//
@@ -94,6 +88,9 @@ public class Course {
 	public void addReveiw(CourseReview courseReview) {
 		this.courseReviews.add(courseReview);
 		courseReview.setCourse(this);
+		
+		this.updateReviewCount();
+		this.updateAvgRating();
 	}
 	
 	
@@ -117,6 +114,8 @@ public class Course {
 	// 수강평 delete
 	public void deleteReveiw(CourseReview courseReview) {
 		this.courseReviews.remove(courseReview);
+		this.updateReviewCount();
+		this.updateAvgRating();
 	}
 	
 	
