@@ -144,6 +144,8 @@ public class CourseServiceImpl implements CourseService {
 		course.get().addRegist(registCourse);
 		
 		CourseResponseDTO courseResponseDTO = this.convertToDTO(course.get());
+		
+		this.addRegistLectures(registCourse);
 		return courseResponseDTO;
 	}
 
@@ -225,7 +227,6 @@ public class CourseServiceImpl implements CourseService {
             
             registCourse.addRegistLecture(registLecture);
         }
-        registLectureRepository.saveAll(registCourse.getRegistLectures());
     }
 	
 	@Override
