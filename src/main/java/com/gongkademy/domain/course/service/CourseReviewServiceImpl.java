@@ -85,6 +85,15 @@ public class CourseReviewServiceImpl implements CourseReviewService {
 
 	@Override
 	public void deleteReview(Long id) {
+		Optional<CourseReview> review = courseReviewRepository.findById(id);
+		Course course = review.get().getCourse();
+		
+		// 수강평 수 update
+		// 평점 평균 update
+		course.deleteReveiw(review.get());
+		course.updateReviewCount();
+		course.updateAvgRating();
+		
 		courseReviewRepository.deleteById(id);
 	}
 
@@ -123,5 +132,4 @@ public class CourseReviewServiceImpl implements CourseReviewService {
 		courseReviewResponseDTO.setNickname(review.getNickname());
 		return courseReviewResponseDTO;
 	}
-
 }

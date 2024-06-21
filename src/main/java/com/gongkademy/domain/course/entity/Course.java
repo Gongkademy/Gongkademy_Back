@@ -78,6 +78,16 @@ public class Course {
 		this.registCourses.add(registCourse);
 	}
 	
+	//== delete ==//
+	// 수강평 delete
+	public void deleteReveiw(CourseReview courseReview) {
+		this.courseReviews.remove(courseReview);
+	}
+	// 수강생 delete
+	public void deleteRegist(RegistCourse registCourse) {
+		this.registCourses.remove(registCourse);
+	}
+	
 	//== update ==//
 	// 수강평수 count
 	public void updateReviewCount() {
