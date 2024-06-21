@@ -171,11 +171,18 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public CourseResponseDTO getCourseDetail(Long courseId) {
+	public CourseResponseDTO getCourseDetail(Long courseId, Long currentMemberId) {
 		Course course = courseRepository.findById(courseId)
 				.orElseThrow(() -> new IllegalArgumentException("강좌 찾을 수 없음"));
 		
 		CourseResponseDTO courseResponseDTO = this.convertToDTO(course);
+		
+		Boolean isRegistered = registCourseRepository.existsByMemberIdAndCourseId(currentMemberId, course.getId());
+		courseResponseDTO.setIsRegistered(isRegistered);
+        
+		Boolean isSaved = scrapRepository.existsByMemberIdAndCourseId(currentMemberId, course.getId());
+		courseResponseDTO.setIsSaved(isSaved);
+		
 		return courseResponseDTO;
 	}
 	

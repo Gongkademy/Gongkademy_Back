@@ -74,10 +74,12 @@ public class CourseController {
         return ResponseEntity.noContent().build();
 	}
 	
+	// TODO : 강좌 대표 이미지 전송
 	// - 강좌 조회
 	@GetMapping("/detail/{course_id}")
-	public ResponseEntity<?> getCourseDetail(@PathVariable("regist_course_id") Long id){
-		CourseResponseDTO courseResponseDTO = courseService.getCourseDetail(id);
+	public ResponseEntity<?> getCourseDetail(@PathVariable("course_id") Long id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Long currentMemberId = principalDetails.getMemberId();
+		CourseResponseDTO courseResponseDTO = courseService.getCourseDetail(id, currentMemberId);
 		return new ResponseEntity<>(courseResponseDTO, HttpStatus.OK);
 	}
 	

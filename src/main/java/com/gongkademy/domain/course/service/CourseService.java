@@ -28,7 +28,7 @@ public interface CourseService {
 
 	void deleteRegistCourse(Long courseId, Long currentMemberId);
 	
-	CourseResponseDTO getCourseDetail(Long courseId);
+	CourseResponseDTO getCourseDetail(Long courseId, Long currentMemberId);
 	
 	Page<NoticeResponseDTO> getCourseNotices(Long courseId, int pageNum, int pageSize);
 
