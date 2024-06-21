@@ -26,7 +26,7 @@ public interface CourseService {
 	
 	CourseResponseDTO scrapCourse(CourseRequestDTO courseRequestDTO, Long currentMemberId);
 
-	void deleteRegistCourse(Long registCourseId);
+	void deleteRegistCourse(Long courseId, Long currentMemberId);
 	
 	CourseResponseDTO getCourseDetail(Long courseId);
 	

@@ -67,9 +67,10 @@ public class CourseController {
 	}
 		
 	//- 강좌 수강 취소
-	@DeleteMapping("/{regist_course_id}")
-	public ResponseEntity<?> deleteRegistCourse(@PathVariable("regist_course_id") Long id){
-		courseService.deleteRegistCourse(id);
+	@DeleteMapping("/{course_id}")
+	public ResponseEntity<?> deleteRegistCourse(@PathVariable("course_id") Long id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Long currentMemberId = principalDetails.getMemberId();
+		courseService.deleteRegistCourse(id, currentMemberId);
         return ResponseEntity.noContent().build();
 	}
 	
