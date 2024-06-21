@@ -68,11 +68,13 @@ public class Course {
 	public void addLecture(Lecture lecture) {
 		this.lectures.add(lecture);
 		lecture.setCourse(this);
+		this.updateLectureCount();
 	}
 	// 수강생 add
 	public void addRegist(RegistCourse registCourse) {
 		this.registCourses.add(registCourse);
 		registCourse.setCourse(this);
+		this.updateRegistCount();
 	}
 	// 스크랩 add
 	public void addScrap(Scrap scrap) {
@@ -98,10 +100,12 @@ public class Course {
 	// 강의 delete
 	public void deleteLecture(Lecture lecture) {
 		this.lectures.remove(lecture);
+		this.updateLectureCount();
 	}
 	// 수강생 delete
 	public void deleteRegist(RegistCourse registCourse) {
 		this.registCourses.remove(registCourse);
+		this.updateRegistCount();
 	}
 	// 스트랩 delete
 	public void deleteScrap(Scrap scrap) {
