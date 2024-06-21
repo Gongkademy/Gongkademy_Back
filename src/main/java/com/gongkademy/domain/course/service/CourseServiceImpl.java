@@ -145,6 +145,7 @@ public class CourseServiceImpl implements CourseService {
 		Optional<Course> course = courseRepository.findById(courseRequestDTO.getCourseId());
 		course.get().updateLectureCount();
 		
+		// 수강 강의 추가
 		addRegistLectures(registCourse);
 		
 		CourseResponseDTO courseResponseDTO = this.convertToDTO(course.get());
@@ -168,6 +169,10 @@ public class CourseServiceImpl implements CourseService {
 				.orElseThrow(() -> new IllegalArgumentException("수강 강좌 찾을 수 없음"));
 		
 		registCourseRepository.delete(registCourse);
+		
+		// 수강생 수 update
+		Optional<Course> course = courseRepository.findById(courseId);
+		course.get().updateLectureCount();
 	}
 
 	@Override
