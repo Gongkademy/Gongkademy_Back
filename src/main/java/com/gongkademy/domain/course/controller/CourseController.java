@@ -52,15 +52,17 @@ public class CourseController {
 	// 2. 강좌 상세 관련
 	// - 강좌 수강
 	@PostMapping("/regist")
-	public ResponseEntity<?> registCourse(@RequestBody CourseRequestDTO courseRequestDTO){
-		CourseResponseDTO courseResponseDTO = courseService.registCourse(courseRequestDTO);
+	public ResponseEntity<?> registCourse(@RequestBody CourseRequestDTO courseRequestDTO, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Long currentMemberId = principalDetails.getMemberId();
+		CourseResponseDTO courseResponseDTO = courseService.registCourse(courseRequestDTO, currentMemberId);
         return new ResponseEntity<>(courseResponseDTO, HttpStatus.CREATED);
 	}
 	
 	// - 강좌 저장
 	@PostMapping("/scrap")
-	public ResponseEntity<?> scrapCourse(@RequestBody CourseRequestDTO courseRequestDTO){
-		CourseResponseDTO courseResponseDTO = courseService.scrapCourse(courseRequestDTO);
+	public ResponseEntity<?> scrapCourse(@RequestBody CourseRequestDTO courseRequestDTO, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Long currentMemberId = principalDetails.getMemberId();
+		CourseResponseDTO courseResponseDTO = courseService.scrapCourse(courseRequestDTO, currentMemberId);
         return new ResponseEntity<>(courseResponseDTO, HttpStatus.CREATED);
 	}
 		

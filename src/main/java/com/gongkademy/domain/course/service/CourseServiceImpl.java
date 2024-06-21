@@ -136,9 +136,9 @@ public class CourseServiceImpl implements CourseService {
 
 
 	@Override
-	public CourseResponseDTO registCourse(CourseRequestDTO courseRequestDTO) {
+	public CourseResponseDTO registCourse(CourseRequestDTO courseRequestDTO, Long currentMemberId) {
+		courseRequestDTO.setMemberId(currentMemberId);
 		RegistCourse registCourse = this.converToEntityRegistCourse(courseRequestDTO);
-		
 		registCourseRepository.save(registCourse);
 		
 		// 수강생 수 update
@@ -152,7 +152,8 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public CourseResponseDTO scrapCourse(CourseRequestDTO courseRequestDTO) {
+	public CourseResponseDTO scrapCourse(CourseRequestDTO courseRequestDTO, Long currentMemberId) {
+		courseRequestDTO.setMemberId(currentMemberId);
 		Scrap scrap = this.convertToEntityScrap(courseRequestDTO);
 		scrapRepository.save(scrap);
 		

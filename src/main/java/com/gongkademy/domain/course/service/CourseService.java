@@ -22,9 +22,9 @@ public interface CourseService {
 	
 	List<CourseContentsResponseDTO> getCourseContents(CourseRequestDTO courseRequestDTO);
 	
-	CourseResponseDTO registCourse(CourseRequestDTO courseRequestDTO);
+	CourseResponseDTO registCourse(CourseRequestDTO courseRequestDTO, Long currentMemberId);
 	
-	CourseResponseDTO scrapCourse(CourseRequestDTO courseRequestDTO);
+	CourseResponseDTO scrapCourse(CourseRequestDTO courseRequestDTO, Long currentMemberId);
 
 	void deleteRegistCourse(Long registCourseId);
 	
