@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.gongkademy.domain.member.entity.Member;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -52,13 +53,17 @@ public class CourseComment {
 	
 	private int likeCount;
 	
-	@OneToMany(mappedBy = "courseComment")
+	@OneToMany(mappedBy = "courseComment", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CourseLike> courseLikes = new ArrayList<>();
 
 	// ==연관관계 메서드==//
 	public void addCourseLike(CourseLike courseLike) {
 		courseLikes.add(courseLike);
 		courseLike.setCourseComment(this);
+	}
+	
+	public void deleteCourseLike(CourseLike courseLike) {
+		courseLikes.remove(courseLike);
 	}
 	
 	//==비즈니스 로직==//
