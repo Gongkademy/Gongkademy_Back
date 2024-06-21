@@ -94,8 +94,17 @@ public class CourseController {
 	// 3. 마이페이지
 	//	- 수강 중인 강좌
 	@GetMapping("/nocomplete")
-	public ResponseEntity<?> getRegistCoursesNoComplete(@RequestBody Long memberId){
-		List<CourseResponseDTO> courseResponseDTOs = courseService.getRegistCoursesNoComplete(memberId);
+	public ResponseEntity<?> getRegistCoursesNoComplete( @AuthenticationPrincipal PrincipalDetails principalDetails){
+        Long currentMemberId = principalDetails.getMemberId();
+		List<CourseResponseDTO> courseResponseDTOs = courseService.getRegistCoursesNoComplete(currentMemberId);
+		return new ResponseEntity<>(courseResponseDTOs, HttpStatus.OK);
+	}
+	
+	//	- 수강 완료 강좌
+	@GetMapping("/complete")
+	public ResponseEntity<?> getRegistCoursesComplete( @AuthenticationPrincipal PrincipalDetails principalDetails){
+        Long currentMemberId = principalDetails.getMemberId();
+		List<CourseResponseDTO> courseResponseDTOs = courseService.getRegistCoursesComplete(currentMemberId);
 		return new ResponseEntity<>(courseResponseDTOs, HttpStatus.OK);
 	}
 	
@@ -106,7 +115,6 @@ public class CourseController {
 		CourseLikeResponseDTO CourseLikeResponseDTO = courseService.like(courseLikeRequestDTO, currentMemberId);
 		return new ResponseEntity<>(CourseLikeResponseDTO, HttpStatus.CREATED);
 	}
-
 
 	/* TODO 
 	 * - 강좌 소개 조회, 강의 자료 다운로드
