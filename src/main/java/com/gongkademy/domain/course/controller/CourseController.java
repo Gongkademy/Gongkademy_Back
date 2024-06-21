@@ -37,8 +37,9 @@ public class CourseController {
 	// 1. 전체 강좌 관련
 	// - 전체 강좌 목록 조회
 	@GetMapping("")
-	public ResponseEntity<?> getAllCourses(@RequestBody Long memberId){
-		List<CourseResponseDTO> courseResponseDTOs = courseService.getAllCourses(memberId);
+	public ResponseEntity<?> getAllCourses(@AuthenticationPrincipal PrincipalDetails principalDetails){
+        Long currentMemberId = principalDetails.getMemberId();
+		List<CourseResponseDTO> courseResponseDTOs = courseService.getAllCourses(currentMemberId);
 		return new ResponseEntity<>(courseResponseDTOs, HttpStatus.OK);
 	}
 	
@@ -94,7 +95,7 @@ public class CourseController {
 	// 3. 마이페이지
 	//	- 수강 중인 강좌
 	@GetMapping("/nocomplete")
-	public ResponseEntity<?> getRegistCoursesNoComplete( @AuthenticationPrincipal PrincipalDetails principalDetails){
+	public ResponseEntity<?> getRegistCoursesNoComplete(@AuthenticationPrincipal PrincipalDetails principalDetails){
         Long currentMemberId = principalDetails.getMemberId();
 		List<CourseResponseDTO> courseResponseDTOs = courseService.getRegistCoursesNoComplete(currentMemberId);
 		return new ResponseEntity<>(courseResponseDTOs, HttpStatus.OK);
@@ -102,7 +103,7 @@ public class CourseController {
 	
 	//	- 수강 완료 강좌
 	@GetMapping("/complete")
-	public ResponseEntity<?> getRegistCoursesComplete( @AuthenticationPrincipal PrincipalDetails principalDetails){
+	public ResponseEntity<?> getRegistCoursesComplete(@AuthenticationPrincipal PrincipalDetails principalDetails){
         Long currentMemberId = principalDetails.getMemberId();
 		List<CourseResponseDTO> courseResponseDTOs = courseService.getRegistCoursesComplete(currentMemberId);
 		return new ResponseEntity<>(courseResponseDTOs, HttpStatus.OK);
