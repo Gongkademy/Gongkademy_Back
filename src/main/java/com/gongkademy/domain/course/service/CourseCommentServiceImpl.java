@@ -40,13 +40,11 @@ public class CourseCommentServiceImpl implements CourseCommentService {
         if(saveComment.getCommentCateg()==CommentCateg.REVIEW) {
         	CourseReview review = saveComment.getCourseReview();
         	review.addCourseComment(saveComment);
-        	review.updateCourseCommentCount();
         }
         
         else if(saveComment.getCommentCateg()==CommentCateg.NOTICE) {
         	Notice notice = saveComment.getNotice();
         	notice.addCourseComment(saveComment);
-        	notice.updateCourseCommentCount();
         }
         
         return convertToDTO(saveComment);
@@ -85,13 +83,11 @@ public class CourseCommentServiceImpl implements CourseCommentService {
 		if (comment.get().getCommentCateg() == CommentCateg.REVIEW) {
 			CourseReview review = comment.get().getCourseReview();
 			review.deleteCourseComment(comment.get());
-			review.updateCourseCommentCount();
 		}
 
 		else if (comment.get().getCommentCateg() == CommentCateg.NOTICE) {
 			Notice notice = comment.get().getNotice();
 			notice.deleteCourseComment(comment.get());
-			notice.updateCourseCommentCount();
 		}
 	}
 	

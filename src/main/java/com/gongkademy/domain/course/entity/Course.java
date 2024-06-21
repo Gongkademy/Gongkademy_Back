@@ -47,7 +47,7 @@ public class Course {
 	@JoinColumn(name="course_note_id")
 	private CourseFile courseNote; // 강좌 자료
 	
-	@OneToMany(mappedBy="course")
+	@OneToMany(mappedBy="course" , cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Lecture> lectures = new ArrayList<>();
 	
 	@OneToMany(mappedBy="course" , cascade = CascadeType.ALL, orphanRemoval = true)
@@ -101,7 +101,6 @@ public class Course {
 	// 강의 delete
 	public void deleteLecture(Lecture lecture) {
 		this.lectures.remove(lecture);
-		lecture.setCourse(null);
 	}
 	// 수강생 delete
 	public void deleteRegist(RegistCourse registCourse) {
