@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -33,20 +34,23 @@ public class Notice {
 	@JoinColumn(name = "course_id")
 	private Course course;
 
-	@OneToMany(mappedBy = "notice")
+	@OneToMany(mappedBy = "notice", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CourseComment> courseComments = new ArrayList<>();
 
 	// ==연관관계 메서드==//
 	public void addCourseComment(CourseComment courseComment) {
 		courseComments.add(courseComment);
 		courseComment.setNotice(this);
+		this.updateCourseCommentCount();
 	}
 
 	public void deleteCourseComment(CourseComment courseComment) {
 		courseComments.remove(courseComment);
+		this.updateCourseCommentCount();
 	}
 	
-	// 댓글 수
+	// ==비즈니스 로직==//
+	// 댓글 수 업데이트
 	public void updateCourseCommentCount() {
 		this.courseCommentCount = (long) courseComments.size();
 	}
