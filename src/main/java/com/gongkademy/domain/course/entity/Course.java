@@ -53,10 +53,10 @@ public class Course {
 	@OneToMany(mappedBy="course" , cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<RegistCourse> registCourses = new ArrayList<>();
 	
-	@OneToMany(mappedBy="course", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	@OneToMany(mappedBy="course", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Scrap> scraps = new ArrayList<>();
 	
-	@OneToMany(mappedBy="course" , cascade = CascadeType.REMOVE, orphanRemoval = true)
+	@OneToMany(mappedBy="course" , cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Notice> notices = new ArrayList<>();
 	
 	@OneToMany(mappedBy="course")
