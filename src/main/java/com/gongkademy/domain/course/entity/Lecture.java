@@ -39,4 +39,16 @@ public class Lecture {
 	@OneToMany(mappedBy = "lecture")
 	private List<RegistLecture> registLectures = new ArrayList<>();
 	
+	//== 연관관계 메소드 == //
+	public void addRegistLecture(RegistLecture registLecture) {
+		registLectures.add(registLecture);
+		registLecture.setLecture(this);
+	}
+
+	public void deleteRegistLecture(RegistLecture registLecture) {
+		registLectures.remove(registLecture);
+		
+		// TODO 따로 registlecture에서 지워줘야됨!!
+	}
+
 }

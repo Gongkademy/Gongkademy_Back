@@ -59,7 +59,7 @@ public class Course {
 	@OneToMany(mappedBy="course" , cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Notice> notices = new ArrayList<>();
 	
-	@OneToMany(mappedBy="course")
+	@OneToMany(mappedBy="course" , cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CourseReview> courseReviews = new ArrayList<>();
 	
 //	@OneToMany(mappedBy="preCourse" , cascade = CascadeType.ALL, orphanRemoval = true)
@@ -117,7 +117,6 @@ public class Course {
 	// 수강평 delete
 	public void deleteReveiw(CourseReview courseReview) {
 		this.courseReviews.remove(courseReview);
-		courseReview.setCourse(null);
 	}
 	
 	
