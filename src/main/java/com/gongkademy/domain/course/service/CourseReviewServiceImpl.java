@@ -36,8 +36,9 @@ public class CourseReviewServiceImpl implements CourseReviewService {
 	@Override
 	public CourseReviewResponseDTO createReview(CourseReviewRequestDTO courseReviewRequestDTO, Long currentMemberId) {
 		CourseReview review = convertToEntity(courseReviewRequestDTO);
-		review.setMember(memberRepository.findById(currentMemberId).get());
-
+		Member member = memberRepository.findById(currentMemberId).get();
+		review.setMember(member);
+		member.addCourseReview(review);
 		Optional<Course> course = courseRepository.findById(courseReviewRequestDTO.getCourseId());
 		course.get().addReveiw(review);
 		

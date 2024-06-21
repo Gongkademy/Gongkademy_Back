@@ -138,7 +138,9 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public CourseResponseDTO registCourse(CourseRequestDTO courseRequestDTO, Long currentMemberId) {
 		courseRequestDTO.setMemberId(currentMemberId);
+		Member member = memberRepository.findById(currentMemberId).get();
 		RegistCourse registCourse = this.converToEntityRegistCourse(courseRequestDTO);
+		member.addRegistCourse(registCourse);
 		
 		Optional<Course> course = courseRepository.findById(courseRequestDTO.getCourseId());
 		course.get().addRegist(registCourse);
@@ -152,8 +154,10 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public CourseResponseDTO scrapCourse(CourseRequestDTO courseRequestDTO, Long currentMemberId) {
 		courseRequestDTO.setMemberId(currentMemberId);
+		Member member = memberRepository.findById(currentMemberId).get();
 		Scrap scrap = this.convertToEntityScrap(courseRequestDTO);
-		
+		member.addScrap(scrap);
+
 		Optional<Course> course = courseRepository.findById(courseRequestDTO.getCourseId());
 		Boolean isSaved = scrapRepository.existsByMemberIdAndCourseId(currentMemberId, course.get().getId());
 		
@@ -249,6 +253,7 @@ public class CourseServiceImpl implements CourseService {
 		        CourseLike like = convertToEntityCourseLike(courseLikeRequestDTO);
 		        review.addCourseLike(like);
 //		        courseReviewRepository.save(review);
+		        member.addCourseLike(like);
 		        return convertToDTOCourseLike(like);
 			}
 		} 
