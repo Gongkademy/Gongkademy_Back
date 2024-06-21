@@ -34,6 +34,8 @@ public class CourseReview {
 	private String content;
 
 	private int likeCount;
+	
+	private Long courseCommentCount;
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "regist_course_id")
@@ -64,6 +66,19 @@ public class CourseReview {
 	public void addCourseLike(CourseLike courseLike) {
 		courseLikes.add(courseLike);
 		courseLike.setCourseReview(this);
+	}
+	
+	public void deleteCourseComment(CourseComment courseComment) {
+		courseComments.remove(courseComment);
+	}
+
+	public void deleteCourseLike(CourseLike courseLike) {
+		courseLikes.remove(courseLike);
+	}
+	
+	// 댓글 수
+	public void updateCourseCommentCount() {
+		this.courseCommentCount = (long) courseComments.size();
 	}
 
 	// ==비즈니스 로직==//

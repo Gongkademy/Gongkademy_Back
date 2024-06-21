@@ -42,6 +42,10 @@ public class Notice {
 		courseComment.setNotice(this);
 	}
 
+	public void deleteCourseComment(CourseComment courseComment) {
+		courseComments.remove(courseComment);
+	}
+	
 	// 댓글 수
 	public void updateCourseCommentCount() {
 		this.courseCommentCount = (long) courseComments.size();
