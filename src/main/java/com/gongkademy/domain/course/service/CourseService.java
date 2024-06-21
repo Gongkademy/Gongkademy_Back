@@ -36,9 +36,8 @@ public interface CourseService {
 	
 	List<CourseResponseDTO> getRegistCoursesComplete(Long memberId);
 
-	CourseLikeResponseDTO like(CourseLikeRequestDTO courseLikeRequestDTO);
+	CourseLikeResponseDTO like(CourseLikeRequestDTO courseLikeRequestDTO, Long currentMemberId);
 	
-	void deleteLike(Long id);
 	/*
 	 * TODO
 	 * - 강좌 소개 조회

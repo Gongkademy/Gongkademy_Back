@@ -208,16 +208,22 @@ public class CourseServiceImpl implements CourseService {
     }
 	
 	@Override
-	public CourseLikeResponseDTO like(CourseLikeRequestDTO courseLikeRequestDTO) {
-        Member member = memberRepository.findById(courseLikeRequestDTO.getMemberId())
+	public CourseLikeResponseDTO like(CourseLikeRequestDTO courseLikeRequestDTO, Long currentMemberId) {
+        Member member = memberRepository.findById(currentMemberId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자 찾을 수 없음"));
 		
+        // 강의평 좋아요
 		if(courseLikeRequestDTO.getLikeCateg()== CourseLikeCateg.REVIEW) {
 	        CourseReview review = courseReviewRepository.findById(courseLikeRequestDTO.getCourseReviewId())
 	                .orElseThrow(() -> new IllegalArgumentException("리뷰 찾을 수 없음"));
 			
-			if (courseLikeRepository.existsByMemberIdAndReviewId(courseLikeRequestDTO.getMemberId(), courseLikeRequestDTO.getCourseReviewId())) {
-				new IllegalArgumentException("이미 좋아요를 누른 수강평입니다.");
+	        Optional<CourseLike> likeOptional = courseLikeRepository.findByMemberIdAndReviewId(member.getId(), courseLikeRequestDTO.getCourseReviewId());
+
+	        if (likeOptional.isPresent()) {
+				CourseLike like = likeOptional.get();
+				courseLikeRepository.deleteById(like.getId());
+				review.decreaseLikeCount();
+		        courseReviewRepository.save(review);
 			} else {
 		        CourseLike like = convertToEntityCourseLike(courseLikeRequestDTO);
 		        CourseLike saveLike = courseLikeRepository.save(like);
@@ -225,11 +231,20 @@ public class CourseServiceImpl implements CourseService {
 		        courseReviewRepository.save(review);
 		        return convertToDTOCourseLike(saveLike);
 			}
-		} else if(courseLikeRequestDTO.getLikeCateg()== CourseLikeCateg.COMMENT) {
+		} 
+	
+		// 댓글 좋아요
+		else if(courseLikeRequestDTO.getLikeCateg()== CourseLikeCateg.COMMENT) {
 	        CourseComment comment = courseCommentRepository.findById(courseLikeRequestDTO.getCourseCommentId())
 	                .orElseThrow(() -> new IllegalArgumentException("댓글 찾을 수 없음"));
-			if (courseLikeRepository.existsByMemberIdAndCourseCommentId(courseLikeRequestDTO.getMemberId(), courseLikeRequestDTO.getCourseCommentId())) {
-				new IllegalArgumentException("이미 좋아요를 누른 댓글입니다.");
+	        
+	        Optional<CourseLike> likeOptional = courseLikeRepository.findByMemberIdAndCourseCommentId(member.getId(), courseLikeRequestDTO.getCourseCommentId());
+
+			if (likeOptional.isPresent()) {
+				CourseLike like = likeOptional.get();
+				courseLikeRepository.deleteById(like.getId());
+				comment.decreaseLikeCount();
+				courseCommentRepository.save(comment);
 			} else {
 		        CourseLike like = convertToEntityCourseLike(courseLikeRequestDTO);
 		        CourseLike saveLike = courseLikeRepository.save(like);
@@ -239,29 +254,6 @@ public class CourseServiceImpl implements CourseService {
 			}
 		}
 		return null;
-	}
-	
-	@Override
-	public void deleteLike(Long id) {
-        Optional<CourseLike> likeOptional = courseLikeRepository.findById(id);
-		
-		if(likeOptional.isPresent()) {
-			CourseLike like = likeOptional.get();
-			courseLikeRepository.deleteById(id);
-			if(like.getLikeCateg()==CourseLikeCateg.REVIEW) {
-		        CourseReview review = courseReviewRepository.findById(like.getCourseReview().getId())
-		                .orElseThrow(() -> new IllegalArgumentException("리뷰 찾을 수 없음"));
-		        review.decreaseLikeCount();
-		        courseReviewRepository.save(review);
-			} else if (like.getLikeCateg()==CourseLikeCateg.COMMENT) {
-				CourseComment comment = courseCommentRepository.findById(like.getCourseComment().getId())
-		                .orElseThrow(() -> new IllegalArgumentException("댓글 찾을 수 없음"));
-		        comment.decreaseLikeCount();
-		        courseCommentRepository.save(comment);
-			}
-		} else {
-			new IllegalArgumentException("좋아요를 누른 적이 없습니다.");
-		}
 	}
 
 	private CourseResponseDTO convertToDTO(Course course) {
