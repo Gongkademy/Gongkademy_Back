@@ -72,10 +72,12 @@ public class Course {
 	// 수강평 add
 	public void addReveiw(CourseReview courseReview) {
 		this.courseReviews.add(courseReview);
+		courseReview.setCourse(this);
 	}
 	// 수강생 add
 	public void addRegist(RegistCourse registCourse) {
 		this.registCourses.add(registCourse);
+		registCourse.setCourse(this);
 	}
 	
 	//== delete ==//

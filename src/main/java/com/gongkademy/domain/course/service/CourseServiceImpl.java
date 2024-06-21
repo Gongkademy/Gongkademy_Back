@@ -139,14 +139,12 @@ public class CourseServiceImpl implements CourseService {
 	public CourseResponseDTO registCourse(CourseRequestDTO courseRequestDTO, Long currentMemberId) {
 		courseRequestDTO.setMemberId(currentMemberId);
 		RegistCourse registCourse = this.converToEntityRegistCourse(courseRequestDTO);
-		registCourseRepository.save(registCourse);
+//		registCourseRepository.save(registCourse);
 		
 		// 수강생 수 update
 		Optional<Course> course = courseRepository.findById(courseRequestDTO.getCourseId());
+		course.get().addRegist(registCourse);
 		course.get().updateLectureCount();
-		
-		// 수강 강의 추가
-		addRegistLectures(registCourse);
 		
 		CourseResponseDTO courseResponseDTO = this.convertToDTO(course.get());
 		return courseResponseDTO;
