@@ -38,6 +38,14 @@ public class CourseReviewServiceImpl implements CourseReviewService {
 		CourseReview review = convertToEntity(courseReviewRequestDTO);
 		review.setMember(memberRepository.findById(currentMemberId).get());
 		CourseReview saveReview = courseReviewRepository.save(review);
+		
+		// 수강평 수 update
+		// 평점 평균 update
+		Optional<Course> course = courseRepository.findById(courseReviewRequestDTO.getCourseId());
+		course.get().addReveiw(saveReview);
+		course.get().updateReviewCount();
+		course.get().updateAvgRating();
+		
 		return convertToDTO(saveReview);
 	}
 
@@ -52,6 +60,10 @@ public class CourseReviewServiceImpl implements CourseReviewService {
 			review.setRating(courseReviewRequestDTO.getRating());
 			review.setContent(courseReviewRequestDTO.getContent());
 			saveReview = courseReviewRepository.save(review);
+			
+			Optional<Course> course = courseRepository.findById(courseReviewRequestDTO.getCourseId());
+			course.get().updateAvgRating();
+
 		} else {
 			throw new IllegalStateException("리뷰 찾을 수 없음");
 		}

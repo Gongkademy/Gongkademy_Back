@@ -68,6 +68,17 @@ public class Course {
 	@OneToMany(mappedBy="course" , cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CourseReview> courseReviews = new ArrayList<>();
 	
+	//== add ==//
+	// 수강평 add
+	public void addReveiw(CourseReview courseReview) {
+		this.courseReviews.add(courseReview);
+	}
+	// 수강생 add
+	public void addRegist(RegistCourse registCourse) {
+		this.registCourses.add(registCourse);
+	}
+	
+	//== update ==//
 	// 수강평수 count
 	public void updateReviewCount() {
         this.reviewCount = (long) courseReviews.size();
