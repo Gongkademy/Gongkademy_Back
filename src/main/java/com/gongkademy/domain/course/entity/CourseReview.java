@@ -91,18 +91,4 @@ public class CourseReview {
 		this.likeCount = (long) this.courseLikes.size();
 	}
 	
-	/*
-	 * 좋아요 증가
-	 */
-//	public void increaseLikeCount() {
-//		this.likeCount++;
-//	}
-
-	/*
-	 * 좋아요 감소
-	 */
-//	public void decreaseLikeCount() {
-//		this.likeCount--;
-//	}
-
 }
