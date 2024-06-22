@@ -181,6 +181,7 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteRegistCourse(Long courseId, Long currentMemberId) {
 		RegistCourse registCourse = registCourseRepository.findByCourseIdAndMemberId(courseId, currentMemberId)
 				.orElseThrow(() -> new IllegalArgumentException("수강 강좌 찾을 수 없음"));
