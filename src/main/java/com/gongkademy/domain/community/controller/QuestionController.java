@@ -86,16 +86,16 @@ public class QuestionController {
     }
 
     // Qna 좋아요한 게시글 가져오기
-    @GetMapping("/{articleId}/liked")
-    public ResponseEntity<List<QnaBoardResponseDTO>> getLikeBoards(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestParam String boardType) {
+    @GetMapping("/liked")
+    public ResponseEntity<List<QnaBoardResponseDTO>> getLikeBoards(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long currentMemberId = principalDetails.getMemberId();
         List<QnaBoardResponseDTO> likeBoards = qnaboardService.getLikeBoards(currentMemberId);
         return ResponseEntity.ok(likeBoards);
     }
 
     // Qna 스크랩한 게시글 가져오기
-    @GetMapping("/{articleId}/scrapped")
-    public ResponseEntity<List<QnaBoardResponseDTO>> getScrapBoards(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestParam String boardType) {
+    @GetMapping("/scrapped")
+    public ResponseEntity<List<QnaBoardResponseDTO>> getScrapBoards(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long currentMemberId = principalDetails.getMemberId();
         List<QnaBoardResponseDTO> scrapBoards = qnaboardService.getScrapBoards(currentMemberId);
         return ResponseEntity.ok(scrapBoards);
