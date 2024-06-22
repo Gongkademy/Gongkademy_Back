@@ -10,15 +10,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gongkademy.domain.course.entity.CourseComment;
-import com.gongkademy.domain.course.repository.CourseCommentRepositoryImpl;
-import com.gongkademy.domain.course.service.CourseCommentService;
+import com.gongkademy.domain.course.repository.CourseCommentRepository;
 
 @SpringBootTest
 @Transactional
 public class CourseCommentServiceTest {
 	
     @Autowired
-    CourseCommentRepositoryImpl courseCommentRepositoryImpl;
+    CourseCommentRepository courseCommentRepository;
     
     @Autowired
     CourseCommentService courseCommentService;
@@ -42,9 +41,9 @@ public class CourseCommentServiceTest {
     @Test
     void 댓글_삭제(){
     	CourseComment comment1 = new CourseComment();
-    	courseCommentRepositoryImpl.save(comment1);
+    	courseCommentRepository.save(comment1);
     	courseCommentService.deleteComment(comment1.getId());
-    	Optional<CourseComment> comment2 = courseCommentRepositoryImpl.findById(comment1.getId());
+    	Optional<CourseComment> comment2 = courseCommentRepository.findById(comment1.getId());
     	assertThat(comment2).isEmpty();
     }
 }

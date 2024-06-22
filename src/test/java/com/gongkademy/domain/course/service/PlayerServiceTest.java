@@ -22,6 +22,7 @@ import com.gongkademy.domain.course.repository.LectureRepository;
 import com.gongkademy.domain.course.repository.RegistCourseRepository;
 import com.gongkademy.domain.course.repository.RegistLectureRepository;
 import com.gongkademy.domain.course.service.PlayerService;
+import com.gongkademy.domain.member.entity.Member;
 
 
 @SpringBootTest
@@ -47,6 +48,7 @@ public class PlayerServiceTest {
 	@Test
 	void 최근_수강_강의_조회() {
 		//given
+		
 		Course c = new Course();
 		Lecture l = new Lecture();
 		
@@ -64,7 +66,7 @@ public class PlayerServiceTest {
 		rcr.save(rc);
 		
 		//when
-		PlayerResponseDTO playerResponseDTO = ps.getPlayerLatest(rc.getId());
+		PlayerResponseDTO playerResponseDTO = ps.getPlayerLatestCourse(rc.getId());
 		
 		//then
 		assertEquals(now, playerResponseDTO.getRecentDate());
@@ -73,6 +75,8 @@ public class PlayerServiceTest {
 	@Test
 	void 다음_강의_조회() {
 		//given
+		Member m = new Member();
+
 		Course c = new Course();
 		Lecture l1 = new Lecture();
 		Lecture l2 = new Lecture();
@@ -102,7 +106,7 @@ public class PlayerServiceTest {
 		playerRequestDTO.setLectureId(l1.getId());
 		
 		//when
-		PlayerResponseDTO playerResponseDTO = ps.getPlayerNext(playerRequestDTO);
+		PlayerResponseDTO playerResponseDTO = ps.getPlayerNextPrev(playerRequestDTO,);
 		
 		//then
 		assertEquals(l2.getId(), playerResponseDTO.getLectureId());		
