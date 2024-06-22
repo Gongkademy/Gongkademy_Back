@@ -48,6 +48,10 @@ public class RegistCourse {
         this.registLectures.add(registLecture);
         registLecture.setRegistCourse(this);
     }
+	
+	public void deleteRegistLecture(RegistLecture registLecture) {
+		this.registLectures.remove(registLecture);
+	}
 
 	// 진행률 업데이트
 	public void updateProgress() {

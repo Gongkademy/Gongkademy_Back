@@ -36,7 +36,7 @@ public class Lecture {
 	@JoinColumn(name="course_id")
 	private Course course;
 	
-	@OneToMany(mappedBy = "lecture")
+	@OneToMany(mappedBy = "lecture",cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<RegistLecture> registLectures = new ArrayList<>();
 	
 	//== 연관관계 메소드 == //
@@ -45,10 +45,5 @@ public class Lecture {
 		registLecture.setLecture(this);
 	}
 
-	public void deleteRegistLecture(RegistLecture registLecture) {
-		registLectures.remove(registLecture);
-		
-		// TODO 따로 registlecture에서 지워줘야됨!!
-	}
 
 }
