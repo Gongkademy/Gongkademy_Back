@@ -33,10 +33,16 @@ public class ConsultingBoardServiceImpl implements ConsultingBoardService{
 
     private final int PAGE_SIZE = 10;
     @Override
-    public List<BoardResponseDTO> findAllConsultingBoards(int pageNo, String criteria) {
+    public List<BoardResponseDTO> findAllConsultingBoards(int pageNo, String criteria, String keyword) {
         // 정렬 기준 내림차순 정렬
         Pageable pageable = PageRequest.of(pageNo, PAGE_SIZE, Sort.by(Sort.Direction.DESC, criteria));
-        Page<BoardResponseDTO> page = boardRepository.findAll(pageable).map(this::convertToDTO);
+        Page<BoardResponseDTO> page;
+        if (keyword == null) {
+            page = boardRepository.findAll(pageable).map(this::convertToDTO);
+        } else {
+            page = boardRepository.findQnaBoardByTitleContainingOrContentContaining(keyword, keyword, pageable).map(this::convertToDTO);
+        }
+
         return page.getContent();
     }
 

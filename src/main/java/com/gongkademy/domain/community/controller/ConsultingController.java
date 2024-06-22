@@ -25,11 +25,13 @@ public class ConsultingController {
     private final String BASE_CRITERIA = "createTime";
     private final String REQUEST_PARAM_PAGE = "page";
     private final String REQUEST_PARAM_CRITERIA = "criteria";
+    private final String KEY_WORD = "keyword";
     // Consulting 전체 리스트 반환
     @GetMapping("")
     public ResponseEntity<?> getAllConsulitng(@RequestParam(defaultValue = START_PAGE_NO, value = REQUEST_PARAM_PAGE) int pageNo,
-                                       @RequestParam(defaultValue = BASE_CRITERIA, value = REQUEST_PARAM_CRITERIA) String criteria){
-        List<BoardResponseDTO> result = consultingBoardService.findAllConsultingBoards(pageNo, criteria);
+                                       @RequestParam(defaultValue = BASE_CRITERIA, value = REQUEST_PARAM_CRITERIA) String criteria,
+                                              @RequestParam(value = KEY_WORD) String keyword){
+        List<BoardResponseDTO> result = consultingBoardService.findAllConsultingBoards(pageNo, criteria, keyword);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

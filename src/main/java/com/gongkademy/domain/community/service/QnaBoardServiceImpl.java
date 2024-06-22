@@ -34,10 +34,16 @@ public class QnaBoardServiceImpl implements QnaBoardService {
 
     // 전체 QnaBoard 조회
     @Override
-    public List<QnaBoardResponseDTO> findAllQnaBoards(int pageNo, String criteria) {
+    public List<QnaBoardResponseDTO> findAllQnaBoards(int pageNo, String criteria, String keyword) {
         // 정렬 기준 내림차순 정렬
         Pageable pageable = PageRequest.of(pageNo, PAGE_SIZE, Sort.by(Sort.Direction.DESC, criteria));
-        Page<QnaBoardResponseDTO> page = qnaBoardRepository.findAll(pageable).map(this::convertToDTO);
+        Page<QnaBoardResponseDTO> page;
+        if (keyword == null) {
+            page = qnaBoardRepository.findAll(pageable).map(this::convertToDTO);
+        } else {
+            page = qnaBoardRepository.findQnaBoardByTitleContainingOrContentContaining(keyword, keyword, pageable).map(this::convertToDTO);
+        }
+
         return page.getContent();
     }
 

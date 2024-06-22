@@ -24,11 +24,13 @@ public class QuestionController {
     private final String BASE_CRITERIA = "createTime";
     private final String REQUEST_PARAM_PAGE = "page";
     private final String REQUEST_PARAM_CRITERIA = "criteria";
+    private final String KEY_WORD = "keyword";
     // Qna 전체 리스트 반환
     @GetMapping("")
-    public ResponseEntity<?> getAllQna( @RequestParam(defaultValue = START_PAGE_NO, value = REQUEST_PARAM_PAGE) int pageNo,
-                                           @RequestParam(defaultValue = BASE_CRITERIA, value = REQUEST_PARAM_CRITERIA) String criteria){
-        List<QnaBoardResponseDTO> result = qnaboardService.findAllQnaBoards(pageNo, criteria);
+    public ResponseEntity<?> getAllQna(@RequestParam(defaultValue = START_PAGE_NO, value = REQUEST_PARAM_PAGE) int pageNo,
+                                           @RequestParam(defaultValue = BASE_CRITERIA, value = REQUEST_PARAM_CRITERIA) String criteria,
+                                       @RequestParam(value = KEY_WORD) String keyword){
+        List<QnaBoardResponseDTO> result = qnaboardService.findAllQnaBoards(pageNo, criteria, keyword);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
