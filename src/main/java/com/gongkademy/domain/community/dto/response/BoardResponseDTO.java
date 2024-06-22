@@ -26,4 +26,5 @@ public class BoardResponseDTO {
     private Long hit;
     private Long commentCount;
     private List<Comment> comments;
+
 }
