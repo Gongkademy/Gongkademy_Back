@@ -1,4 +1,4 @@
-package com.gongkademy.service;
+package com.gongkademy.domain.course.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
