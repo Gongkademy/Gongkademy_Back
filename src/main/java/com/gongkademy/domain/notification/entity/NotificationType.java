@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum NotificationType {
-    Board("Board"),Notice("Notice");
+    CONSULTING("consulting"), QUESTION("question"), NOTICE("notice");
 
     private final String key;
 }
