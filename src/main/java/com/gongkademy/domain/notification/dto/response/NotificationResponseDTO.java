@@ -1,4 +1,4 @@
-package com.gongkademy.domain.notification.dto;
+package com.gongkademy.domain.notification.dto.response;
 
 import com.gongkademy.domain.notification.entity.NotificationType;
 import lombok.AllArgsConstructor;
@@ -12,15 +12,15 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class NotificationDTO {
+public class NotificationResponseDTO {
 
     //알람 목록조회
-    private String receiver;
+    private long receiver;
     private NotificationType type;
-    private Long articleId;
+    private long articleId;
     private String message;
     private boolean isRead;
-    private LocalDateTime create_date;
+    private LocalDateTime createDate;
 
 
 }
