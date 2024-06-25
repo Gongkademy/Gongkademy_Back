@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -18,6 +20,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@SuperBuilder
 public class Notification {
 
     @Id
@@ -30,6 +33,7 @@ public class Notification {
     private Member receiver;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private NotificationType type;
 
     @Column(nullable = false)
@@ -39,10 +43,12 @@ public class Notification {
     private String message;
 
     @Column(nullable = false)
-    private boolean isRead;
+    @Builder.Default
+    private boolean isRead = false;
 
     @Column(nullable = false)
-    private LocalDateTime createDate;
+    @Builder.Default
+    private LocalDateTime createDate = LocalDateTime.now();
 
 
 
