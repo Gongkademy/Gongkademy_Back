@@ -6,10 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public interface NotificationService {
 
     Notification createNotification(Long memberId, NotificationType type, Long articleId, String message);
     List<Notification> getNotifications(Long memberId);
-    void isRead(Long notificationId);
+    void changeReadStatus(Long notificationId);
 }
