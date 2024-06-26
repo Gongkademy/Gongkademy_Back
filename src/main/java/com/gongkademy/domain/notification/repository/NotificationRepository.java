@@ -7,7 +7,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
-        List<Notification> findByReceiver_IdAndCreateTime(Long memberId, LocalDateTime now);
+    List<Notification> findByReceiver_IdAndCreateTimeBetween(Long receiverId, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
     }
 
 
