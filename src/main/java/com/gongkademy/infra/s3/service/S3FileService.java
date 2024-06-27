@@ -125,4 +125,8 @@ public class S3FileService implements FileService {
             throw new AmazonS3Exception("에러");
 		}
     }
+    
+    public String getFileUrl(String savedfileName) {
+        return amazonS3.getUrl(savedfileName, savedfileName).toString();
+    }
 }
