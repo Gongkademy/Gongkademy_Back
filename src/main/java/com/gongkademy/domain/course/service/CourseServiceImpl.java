@@ -288,7 +288,7 @@ public class CourseServiceImpl implements CourseService {
 		List<CourseFile> imgs = courseFileRepository.findByCourseIdAndCategAndIdNot(courseId, CourseFileCateg.COURSEIMG, thumbnailId);
 		
 		List<String> fileUrls = imgs.stream()
-	            .map(file -> fileService.getFileUrl(file.getSave_file()))
+	            .map(file -> fileService.getFileUrl(file.getFilePath()))
 	            .collect(Collectors.toList());
 		courseInfoResponseDTO.setFileUrls(fileUrls);
 		
@@ -369,8 +369,8 @@ public class CourseServiceImpl implements CourseService {
 		courseResponseDTO.setCourseId(course.getId());
 		
 		// 강좌 대표 이미지 조회
-		String fileName = course.getCourseImg().getSave_file();
-		courseResponseDTO.setFileUrl(fileService.getFileUrl(fileName));
+		String filePath = course.getCourseImg().getFilePath();
+		courseResponseDTO.setFileUrl(fileService.getFileUrl(filePath));
 
 		return courseResponseDTO;
 	}
