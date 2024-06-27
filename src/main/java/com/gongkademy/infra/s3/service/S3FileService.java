@@ -127,6 +127,6 @@ public class S3FileService implements FileService {
     }
     
     public String getFileUrl(String savedfileName) {
-        return amazonS3.getUrl(savedfileName, savedfileName).toString();
+        return amazonS3.getUrl(bucketName, savedfileName).toString();
     }
 }
