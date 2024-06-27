@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gongkademy.domain.course.dto.request.CourseLikeRequestDTO;
 import com.gongkademy.domain.course.dto.request.CourseRequestDTO;
 import com.gongkademy.domain.course.dto.response.CourseContentsResponseDTO;
+import com.gongkademy.domain.course.dto.response.CourseInfoResponseDTO;
 import com.gongkademy.domain.course.dto.response.CourseLikeResponseDTO;
 import com.gongkademy.domain.course.dto.response.CourseResponseDTO;
 import com.gongkademy.domain.course.dto.response.NoticeResponseDTO;
@@ -127,10 +128,10 @@ public class CourseController {
 	}
 	
 	@GetMapping("/info/{course_id}")
-	public ResponseEntity<?> getCourseInfo(){
+	public ResponseEntity<?> getCourseInfo(@PathVariable("course_id") Long id){
 
 		 // 선수과목,강의 소개,강의 링크,사진
-
-		return null;
+		CourseInfoResponseDTO courseInfoResponseDTO = courseService.getCourseInfo(id);
+		return new ResponseEntity<>(courseInfoResponseDTO, HttpStatus.CREATED);
 	}
 }
