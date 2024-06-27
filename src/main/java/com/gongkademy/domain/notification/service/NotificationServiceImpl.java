@@ -2,6 +2,7 @@ package com.gongkademy.domain.notification.service;
 
 import com.gongkademy.domain.member.entity.Member;
 import com.gongkademy.domain.member.repository.MemberRepository;
+import com.gongkademy.domain.notification.dto.request.NotificationRequestDTO;
 import com.gongkademy.domain.notification.entity.Notification;
 import com.gongkademy.domain.notification.entity.NotificationType;
 import com.gongkademy.domain.notification.repository.NotificationRepository;
@@ -17,21 +18,26 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
     private final MemberRepository memberRepository;
+    private final EmitterServiceImpl emitterService;
 
     @Override
-    public Notification createNotification(Long memberId, NotificationType type, Long articleId, String message) {
-        Member member = memberRepository.findById(memberId).orElseThrow(IllegalArgumentException::new);
-
+    public Notification createNotification(NotificationRequestDTO notificationRequest) {
+        Member member = memberRepository.findById(notificationRequest.getReceiver()).orElseThrow(IllegalArgumentException::new);
+        String message = notificationRequest.getMessage();
         Notification notification = Notification.builder()
                 .receiver(member)
-                .type(type)
-                .articleId(articleId)
+                .type(notificationRequest.getType())
+                .articleId(notificationRequest.getArticleId())
                 .message(message)
                 .isRead(false)
                 .createTime(LocalDateTime.now())
                 .build();
 
-        return notificationRepository.save(notification);
+        Notification savedNotification = notificationRepository.save(notification);
+
+        emitterService.sendNotification(notificationRequest);
+
+        return savedNotification;
     }
 
     @Override
@@ -48,7 +54,7 @@ public class NotificationServiceImpl implements NotificationService {
     public void changeReadStatus(Long notificationId) {
         Notification notification = notificationRepository.findById(notificationId).orElseThrow(IllegalArgumentException::new);
 
-        notification.setRead(true);
+        notification.changeReadStatus();
         notificationRepository.save(notification);
     }
 }
