@@ -43,37 +43,25 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_BOARD_ID));
 
-        boolean isLiked = isLikedByMember(board, memberId);
-        boolean isScrapped = isScrappedByMember(board, memberId);
+        boolean isLiked = (memberId != null) && isLikedByMember(board, memberId);
+        boolean isScrapped = (memberId != null) && isScrappedByMember(board, memberId);
 
-        incrementHit(board.getArticleId());
+        board.setHit(board.getHit() + 1);
 
         return convertToDTO(board, isLiked, isScrapped);
     }
 
     @Override
-    @Transactional
-    public void incrementHit(Long id) {
-        Optional<Board> boardOptional = boardRepository.findById(id);
-
-        if (boardOptional.isPresent()) {
-            Board board = boardOptional.get();
-            board.setHit(board.getHit() + 1);
-            boardRepository.save(board);
-        } else {
-            throw new CustomException(ErrorCode.INVALID_BOARD_ID);
-        }
-    }
-
-    @Override
-    public List<BoardResponseDTO> getLatestBoards(int LIMIT) {
+    public List<BoardResponseDTO> getLatestBoards(int LIMIT, Long memberId) {
         Pageable pageable = PageRequest.of(DEFAULT_TOP, LIMIT);
         List<Board> boards = boardRepository.findByOrderByCreateTimeDesc(pageable).getContent();
 
         List<BoardResponseDTO> boardResponseDTOS = new ArrayList<>();
 
         for (Board board : boards) {
-            boardResponseDTOS.add(convertToDTO(board));
+            boolean isLiked = (memberId != null) && isLikedByMember(board, memberId);
+            boolean isScrapped = (memberId != null) && isScrappedByMember(board, memberId);
+            boardResponseDTOS.add(convertToDTO(board, isLiked, isScrapped));
         }
         return boardResponseDTOS;
     }
