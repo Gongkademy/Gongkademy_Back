@@ -27,8 +27,9 @@ public class BoardController {
 
     // 공지사항 상세보기
     @GetMapping("/notice/{articleId}")
-    public ResponseEntity<?> getBoard(@PathVariable Long articleId) {
-        BoardResponseDTO boardResponseDTO = boardService.getBoard(articleId);
+    public ResponseEntity<?> getBoard(@PathVariable Long articleId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Long currentMemberId = principalDetails.getMemberId();
+        BoardResponseDTO boardResponseDTO = boardService.getBoard(articleId, currentMemberId);
         return ResponseEntity.ok(boardResponseDTO);
     }
 

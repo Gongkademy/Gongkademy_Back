@@ -7,8 +7,7 @@ import java.util.List;
 
 public interface BoardService {
 
-    BoardResponseDTO getBoard(Long id);
-
+    BoardResponseDTO getBoard(Long id, Long memberId);
 
     void incrementHit(Long id);
 
@@ -22,14 +21,4 @@ public interface BoardService {
 
     List<BoardResponseDTO> getScrapBoards(Long memberId);
 
-//    관리자 전용
-//    BoardResponseDTO createBoard(BoardRequestDTO boardRequestDTO);
-//
-//    BoardResponseDTO updateBoard(Long id, BoardRequestDTO boardRequestDTO);
-//
-//    List<BoardResponseDTO> getAllBoards();
-//
-//    void deleteBoard(Long id);
-//
-//
 }

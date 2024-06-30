@@ -39,15 +39,16 @@ public class BoardServiceImpl implements BoardService {
     private final int DEFAULT_TOP = 0;
 
     @Override
-    public BoardResponseDTO getBoard(Long id) {
-        Optional<Board> boardOptional = boardRepository.findById(id);
-        if (boardOptional.isPresent()) {
-            Board board = boardOptional.get();
-            // 조회 수 추가
-            incrementHit(board.getArticleId());
-            return convertToDTO(boardOptional.get());
-        }
-        throw new CustomException(ErrorCode.INVALID_BOARD_ID);
+    public BoardResponseDTO getBoard(Long id, Long memberId) {
+        Board board = boardRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_BOARD_ID));
+
+        boolean isLiked = isLikedByMember(board, memberId);
+        boolean isScrapped = isScrappedByMember(board, memberId);
+
+        incrementHit(board.getArticleId());
+
+        return convertToDTO(board, isLiked, isScrapped);
     }
 
     @Override
@@ -152,20 +153,18 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
-    private Board convertToEntity(BoardRequestDTO boardRequestDTO) {
-        Member member = memberRepository.findById(boardRequestDTO.getMemberId())
+    private boolean isLikedByMember(Board board, Long memberId) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_MEMBER_ID));
+        Optional<Pick> pickOptional = pickRepository.findByBoardAndMemberAndPickType(board, member, PickType.LIKE);
+        return pickOptional.isPresent();
+    }
 
-        return Board.builder()
-                .boardType(boardRequestDTO.getBoardType())
-                .member(member)
-                .title(boardRequestDTO.getTitle())
-                .content(boardRequestDTO.getContent())
-                .hit(0L)
-                .likeCount(0L)
-                .scrapCount(0L)
-                .commentCount(0L)
-                .build();
+    private boolean isScrappedByMember(Board board, Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_MEMBER_ID));
+        Optional<Pick> pickOptional = pickRepository.findByBoardAndMemberAndPickType(board, member, PickType.SCRAP);
+        return pickOptional.isPresent();
     }
 
     private BoardResponseDTO convertToDTO(Board board) {
@@ -186,5 +185,23 @@ public class BoardServiceImpl implements BoardService {
 
     }
 
+    private BoardResponseDTO convertToDTO(Board board, boolean isLiked, boolean isScrapped) {
 
+        return BoardResponseDTO.builder().
+                articleId(board.getArticleId())
+                .boardType(board.getBoardType())
+                .memberId(board.getMember().getId())
+                .nickname(board.getMember().getNickname())
+                .title(board.getTitle())
+                .content(board.getContent())
+                .createTime(board.getCreateTime())
+                .likeCount(board.getLikeCount())
+                .scrapCount(board.getScrapCount())
+                .hit(board.getHit())
+                .commentCount(board.getCommentCount())
+                .comments(board.getComments())
+                .isLiked(isLiked)
+                .isScrapped(isScrapped)
+                .build();
+    }
 }
